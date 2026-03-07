@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigiTech Cyber - Smart AI Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+<meta property="og:title" content="🤖 DigiTech Cyber - Smart AI Assistant" />
+<meta property="og:description" content="Koi bhi sawaal poochhen — AI Hindi mein smart jawab dega!" />
+<style>
+:root{--or:#FF6B00;--deep:#0d0d1a;--card:#13132a;--acc:#1a1a3e;--wh:#f0f4ff;--gr:#8892b0;--gn:#00ff88;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Baloo 2','Noto Sans Devanagari',sans-serif;background:var(--deep);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;background-image:radial-gradient(ellipse at 20% 50%,rgba(255,107,0,0.08) 0%,transparent 60%);}
+.wrap{width:100%;max-width:430px;display:flex;flex-direction:column;height:93vh;max-height:780px;border-radius:26px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,0.7),0 0 0 1px rgba(255,107,0,0.2);}
+.hdr{background:linear-gradient(135deg,#FF6B00,#cc4400);padding:15px 18px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
+.hdr::after{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:rgba(255,255,255,0.07);border-radius:50%;}
+.av0{width:46px;height:46px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid rgba(255,255,255,0.35);flex-shrink:0;}
+.ht h2{color:#fff;font-size:16px;font-weight:800;}
+.ht p{color:rgba(255,255,255,0.85);font-size:11px;}
+.dot{display:inline-block;width:7px;height:7px;background:var(--gn);border-radius:50%;margin-right:4px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.4);}}
+.badge{margin-left:auto;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:4px 10px;font-size:11px;color:#fff;font-weight:700;flex-shrink:0;z-index:1;}
+.chat{flex:1;background:var(--card);overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;}
+.chat::-webkit-scrollbar{width:3px;}
+.chat::-webkit-scrollbar-thumb{background:rgba(255,107,0,0.3);border-radius:4px;}
+.msg{display:flex;gap:8px;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{flex-direction:row-reverse;}
+.av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#FF6B00,#e55a00);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;}
+.bubble{max-width:80%;padding:10px 14px;border-radius:18px;font-size:13.5px;line-height:1.7;}
+.bot .bubble{background:var(--acc);color:var(--wh);border-bottom-left-radius:4px;}
+.user .bubble{background:linear-gradient(135deg,#FF6B00,#e55a00);color:#fff;border-bottom-right-radius:4px;}
+.typing{display:flex;gap:5px;align-items:center;padding:10px 14px;background:var(--acc);border-radius:18px;border-bottom-left-radius:4px;width:fit-content;}
+.typing span{width:6px;height:6px;background:var(--gr);border-radius:50%;animation:bounce 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-6px);}}
+.qr-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:2px 0 2px 38px;animation:fadeUp .4s ease;}
+.qr{background:transparent;border:1.5px solid var(--or);color:var(--or);padding:5px 11px;border-radius:18px;font-size:12px;font-family:'Baloo 2',sans-serif;cursor:pointer;transition:all .18s;font-weight:600;}
+.qr:active,.qr:hover{background:var(--or);color:#fff;}
+.divider{text-align:center;color:var(--gr);font-size:11px;}
+.bot-area{background:var(--deep);padding:12px 14px;display:flex;flex-direction:column;gap:9px;border-top:1px solid rgba(255,255,255,.05);}
+.sbar{font-size:12px;color:var(--gr);text-align:center;min-height:15px;transition:all .2s;}
+.sbar.listen{color:#FF6B00;font-weight:600;}.sbar.speak{color:var(--gn);font-weight:600;}.sbar.think{color:#a78bfa;font-weight:600;}
+.ctrl{display:flex;gap:9px;align-items:center;}
+.tin{flex:1;background:var(--card);border:1.5px solid rgba(255,107,0,.2);border-radius:22px;padding:10px 16px;color:var(--wh);font-size:14px;font-family:'Baloo 2',sans-serif;outline:none;transition:border .2s;}
+.tin:focus{border-color:var(--or);}.tin::placeholder{color:var(--gr);}
+.sbtn{width:42px;height:42px;background:var(--acc);border:1.5px solid rgba(255,107,0,.3);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--or);flex-shrink:0;transition:all .2s;}
+.sbtn:hover{background:var(--or);color:#fff;}
+.mbtn{width:50px;height:50px;background:linear-gradient(135deg,#FF6B00,#cc4400);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:all .2s;box-shadow:0 4px 20px rgba(255,107,0,.45);}
+.mbtn.listen{background:linear-gradient(135deg,#ff2020,#cc0000);animation:mPulse 1s infinite;}
+.mbtn.speak{background:linear-gradient(135deg,#00b894,#007a63);}
+@keyframes mPulse{0%,100%{box-shadow:0 0 0 5px rgba(255,0,0,.15);}50%{box-shadow:0 0 0 14px rgba(255,0,0,.04);}}
+/* Audio Test Panel */
+.audio-test{background:var(--acc);border:1.5px solid rgba(255,107,0,.25);border-radius:16px;padding:12px 14px;margin:8px 14px;display:none;flex-direction:column;gap:8px;animation:fadeUp .3s ease;}
+/* API Settings Panel */
+.api-panel{background:var(--acc);border:1.5px solid rgba(255,107,0,.35);border-radius:16px;padding:14px;margin:8px 14px;display:none;flex-direction:column;gap:10px;animation:fadeUp .3s ease;}
+.api-panel.show{display:flex;}
+.api-panel h4{color:var(--or);font-size:13px;font-weight:700;}
+.api-panel p{color:var(--gr);font-size:11px;line-height:1.5;}
+.api-input{background:var(--deep);border:1.5px solid rgba(255,107,0,.3);border-radius:10px;padding:9px 12px;color:var(--wh);font-size:12px;font-family:'Baloo 2',sans-serif;outline:none;width:100%;}
+.api-input:focus{border-color:var(--or);}
+.api-row{display:flex;gap:8px;}
+.api-save{flex:1;background:linear-gradient(135deg,#FF6B00,#cc4400);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;padding:8px;cursor:pointer;font-family:'Baloo 2',sans-serif;}
+.api-clear{background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:10px;color:var(--gr);font-size:12px;padding:8px 12px;cursor:pointer;font-family:'Baloo 2',sans-serif;}
+.api-status{font-size:11px;text-align:center;padding:4px;border-radius:8px;}
+.api-status.ok{color:#00ff88;background:rgba(0,255,136,0.1);}
+.api-status.fail{color:#ff6b6b;background:rgba(255,107,107,0.1);}
+.api-status.info{color:#a78bfa;background:rgba(167,139,250,0.1);}
+.audio-test.show{display:flex;}
+.audio-test h4{color:var(--or);font-size:13px;font-weight:700;margin:0;}
+.test-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.test-label{color:var(--gr);font-size:12px;flex:1;}
+.test-status{font-size:12px;font-weight:600;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,0.05);}
+.test-status.ok{color:#00ff88;background:rgba(0,255,136,0.1);}
+.test-status.fail{color:#ff6b6b;background:rgba(255,107,107,0.1);}
+.test-status.check{color:#a78bfa;background:rgba(167,139,250,0.1);}
+.tbtn{background:linear-gradient(135deg,#FF6B00,#cc4400);border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:700;padding:6px 14px;cursor:pointer;font-family:'Baloo 2',sans-serif;}
+.tbtn:active{opacity:.8;}
+.close-test{background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:var(--gr);font-size:11px;padding:4px 10px;cursor:pointer;font-family:'Baloo 2',sans-serif;align-self:flex-end;}
+.test-toggle{width:36px;height:36px;background:var(--acc);border:1.5px solid rgba(255,107,0,.3);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:all .2s;}
+.test-toggle:hover{background:var(--or);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="av0">🏛️</div>
+    <div class="ht"><h2>DigiTech Cyber</h2><p><span class="dot"></span>Smart AI • Koi bhi sawaal poochhen!</p></div>
+    <div class="badge">🤖 AI</div>
+  </div>
+  <div class="chat" id="chat">
+    <div class="divider">Aaj</div>
+    <div class="msg bot"><div class="av">🤖</div>
+      <div class="bubble">🙏 <b>Namaste! Main DigiTech Cyber ka Smart AI hun!</b><br><br>
+      🎤 <b>Mic dabao aur koi bhi sawaal Hindi mein bolein</b><br><br>
+      📋 Government services • 💰 Finance • 📈 Share Market • 🏠 PM Awas • ⚡ Bijli • 🎓 Scholarship — <b>sab ka jawab milega!</b></div>
+    </div>
+    <div class="qr-wrap">
+      <button class="qr" onclick="ask('Aadhaar card')">🪪 Aadhaar</button>
+      <button class="qr" onclick="ask('PAN card')">🗂️ PAN</button>
+      <button class="qr" onclick="ask('Train ticket')">🚂 Train</button>
+      <button class="qr" onclick="ask('PM Kisan')">🌾 PM Kisan</button>
+      <button class="qr" onclick="ask('Loan')">💰 Loan</button>
+      <button class="qr" onclick="ask('EPF kya hai')">🏦 EPF</button>
+      <button class="qr" onclick="ask('Sukanya Samriddhi Yojana')">👧 Sukanya</button>
+      <button class="qr" onclick="ask('PM Awas Yojana')">🏠 PM Awas</button>
+      <button class="qr" onclick="ask('Scholarship kaise milegi')">🎓 Scholarship</button>
+      <button class="qr" onclick="ask('Bijli meter connection')">⚡ Bijli</button>
+      <button class="qr" onclick="ask('Jamin dakhil kharij kaise hoga')">📜 Dakhil Kharij</button>
+      <button class="qr" onclick="ask('Share market kya hai')">📈 Share Market</button>
+      <button class="qr" onclick="ask('Demat account kholna hai')">📂 Demat</button>
+      <button class="qr" onclick="ask('Insurance')">🛡️ Insurance</button>
+      <button class="qr" onclick="ask('Driving licence')">🚗 DL</button>
+      <button class="qr" onclick="ask('GST')">📊 GST</button>
+      <button class="qr" onclick="ask('ITR income tax filing')">📝 ITR</button>
+      <button class="qr" onclick="ask('Exam form')">📝 Exam Form</button>
+      <button class="qr" onclick="ask('WiFi installation chahiye')">📶 WiFi</button>
+      <button class="qr" onclick="ask('Video advertisement banao')">🎬 Video Ad</button>
+      <button class="qr" onclick="ask('Audio advertisement banao')">🎙️ Audio Ad</button>
+      <button class="qr" onclick="ask('Contact aur address')">📞 Contact</button>
+      <button class="qr" onclick="ask('Sabhi services')">📋 All</button>
+    </div>
+  </div>
+  <!-- API Settings Panel -->
+  <div class="api-panel" id="apiPanel">
+    <h4>🔑 Sarvam AI — API Key Settings</h4>
+    <p>Apni Sarvam AI API key yahan daalo — sirf aapke phone mein save hogi, kahin nahi jaayegi! 🔒</p>
+    <input class="api-input" type="password" id="apiKeyInput" placeholder="sk-... ya apni API key paste karein"/>
+    <div class="api-row">
+      <button class="api-save" onclick="saveApiKey()">💾 Save Karein</button>
+      <button class="api-clear" onclick="clearApiKey()">🗑️ Hatao</button>
+    </div>
+    <div class="api-status info" id="apiStatus">⏳ API key abhi set nahi hai</div>
+    <button class="api-clear" style="align-self:flex-end" onclick="document.getElementById('apiPanel').classList.remove('show')">✕ Band karein</button>
+  </div>
+  <!-- Audio Test Panel -->
+  <div class="audio-test" id="audioTest">
+    <h4>🔊 Audio Test Panel</h4>
+    <div class="test-row">
+      <span class="test-label">🌐 Browser Support</span>
+      <span class="test-status" id="tBrowser">Checking...</span>
+    </div>
+    <div class="test-row">
+      <span class="test-label">🗣️ Hindi Voice</span>
+      <span class="test-status" id="tVoice">Checking...</span>
+    </div>
+    <div class="test-row">
+      <span class="test-label">🎤 Microphone</span>
+      <span class="test-status" id="tMic">Checking...</span>
+    </div>
+    <div class="test-row">
+      <span class="test-label">🔈 Voice Test</span>
+      <button class="tbtn" onclick="runVoiceTest()">▶ Suniye</button>
+    </div>
+    <button class="close-test" onclick="document.getElementById('audioTest').classList.remove('show')">✕ Band karein</button>
+  </div>
+  <div class="bot-area">
+    <div class="sbar" id="sbar">🎤 Mic dabao ya likhein — koi bhi sawaal poochh sakte hain!</div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;padding:0 2px;">
+      <button class="test-toggle" onclick="openAudioTest()" title="Audio Test" style="width:32px;height:32px;font-size:13px;">🔊</button>
+      <button class="test-toggle" onclick="openApiPanel()" title="Sarvam API Key" style="width:32px;height:32px;font-size:13px;">⚙️</button>
+    </div>
+    <div class="ctrl">
+      <input class="tin" id="tin" placeholder="Koi bhi sawaal likhein..." onkeypress="if(event.key==='Enter')send()"/>
+      <button class="sbtn" onclick="send()">➤</button>
+      <button class="mbtn" id="mbtn" onclick="toggleMic()">🎤</button>
+    </div>
+  </div>
+</div>
+<script>
+const synth = (typeof window !== 'undefined' && window.speechSynthesis) ? window.speechSynthesis : null;
+let recog,isListen=false,isSpeak=false,hist=[];
+
+// ============ SMART KNOWLEDGE BASE ============
+const KB = {
+  // GOVERNMENT SERVICES - DigiTech
+  aadhaar: {
+    keys:['aadhaar','adhar','aadhar','आधार','आधर'],
+    fn:(t)=>{
+      if(t.includes('update')||t.includes('address')||t.includes('pata')||t.includes('badal')||t.includes('बदल')||t.includes('change'))
+        return r(`🪪 <b>Aadhaar Address Update</b><br><br>✅ Documents: Bijli bill / Ration card / Bank passbook<br>✅ Time: 3-7 din mein update<br>✅ <b>Charges: ₹100</b><br><br>📍 Bachharpur Bazar, Dumra, Sitamarhi<br>📞 <b>8210073056</b>`,['📱 Mobile Link','🖨️ Print','🏠 Menu']);
+      if(t.includes('mobile')||t.includes('number')||t.includes('link')||t.includes('मोबाइल'))
+        return r(`📱 <b>Aadhaar Mobile Link</b><br><br>✅ OTP services ke liye zaruri<br>✅ Sirf 10 minute<br>✅ <b>Charges: ₹100</b><br>📍 Bachharpur Bazar, Dumra, Sitamarhi<br>📞 <b>8210073056</b>`,['🪪 Aadhaar Update','🏠 Menu']);
+      if(t.includes('print')||t.includes('download')||t.includes('copy')||t.includes('प्रिंट'))
+        return r(`🖨️ <b>Aadhaar Print/Download</b><br><br>✅ Original print — ₹20<br>✅ Aadhaar number leke aayein<br>📞 <b>8210073056</b>`,['🪪 Aadhaar Update','🏠 Menu']);
+      return r(`🪪 <b>Aadhaar Card — Sabhi Services</b><br><br>✅ Address update — <b>₹100</b><br>✅ Mobile link — <b>₹100</b><br>✅ Print/Download — <b>₹20</b><br>✅ Correction & name update — <b>₹100</b><br>✅ Naya enrollment — Free (UIDAI center)<br><br>📍 Bachharpur Bazar, Dumra, Sitamarhi<br>📞 <b>8210073056</b>`,['📍 Address Update','📱 Mobile Link','🖨️ Print','🔗 PAN Link']);
+    }
+  },
+  pan: {
+    keys:['pan card','pan apply','पैन','पान card'],
+    fn:(t)=>{
+      if(t.includes('link')||t.includes('aadhaar')) return r(`🔗 <b>PAN-Aadhaar Link</b><br><br>⚠️ <b>Mandatory hai — link nahi to PAN invalid!</b><br>✅ Online link — sirf 5 min<br>✅ <b>Charges: ₹50</b><br>📞 <b>8210073056</b>`,['🗂️ Naya PAN','🏠 Menu']);
+      if(t.includes('naya')||t.includes('apply')||t.includes('new')||t.includes('नया')||t.includes('बनवाना')) return r(`🗂️ <b>Naya PAN Card Apply</b><br><br>✅ Documents: Aadhaar + Photo + Sign<br>✅ 7-15 din mein milega<br>✅ <b>Charges: ₹150</b><br>📞 <b>8210073056</b>`,['🔗 PAN-Aadhaar Link','🏠 Menu']);
+      return r(`🗂️ <b>PAN Card Services</b><br><br>✅ Naya PAN — ₹150<br>✅ Duplicate/Reprint — ₹150<br>✅ PAN-Aadhaar link — ₹50<br>✅ Correction<br>📞 <b>8210073056</b>`,['🆕 Naya PAN','🔗 Link','🔄 Duplicate','🏠 Menu']);
+    }
+  },
+  train: {
+    keys:['train','railway','irctc','tatkal','pnr','ट्रेन','रेलवे','rail ticket'],
+    fn:(t)=>{
+      if(t.includes('tatkal')||t.includes('urgent')||t.includes('तत्काल')) return r(`⚡ <b>Tatkal Train Booking</b><br><br>✅ AC classes: <b>10:00 AM</b> se booking<br>✅ Non-AC: <b>11:00 AM</b> se booking<br>✅ Tatkal charges extra lagte hain<br>✅ <b>Charges: ₹50 + Tatkal charge</b><br>📞 <b>8210073056</b>`,['🚂 Normal Booking','📋 PNR Status','🏠 Menu']);
+      if(t.includes('pnr')||t.includes('status')||t.includes('check')||t.includes('confirm')) return r(`🔍 <b>PNR Status Check</b><br><br>✅ 10 digit PNR leke aayein<br>✅ Waiting/RAC/Confirm — sab check<br>✅ <b>Charges: ₹10</b><br>📞 <b>8210073056</b>`,['🚂 Ticket Book','🏠 Menu']);
+      if(t.includes('cancel')||t.includes('refund')||t.includes('wapas')) return r(`❌ <b>Train Cancellation</b><br><br>✅ Online cancellation<br>✅ Refund 3-7 din mein<br><b>Charges:</b> 48hr pehle — minimum, 24-48hr — 25%, 4-24hr — 50%<br>📞 <b>8210073056</b>`,['🚂 Naya Ticket','🏠 Menu']);
+      return r(`🚂 <b>Train Ticket Booking</b><br><br>✅ IRCTC booking — ₹30-50/ticket<br>✅ Tatkal available<br>✅ Sleeper, 3AC, 2AC, 1AC, GN<br>✅ PNR status, cancellation<br>⏰ 10 minute mein booking done!<br>📞 <b>8210073056</b>`,['⚡ Tatkal','📋 PNR Status','❌ Cancel','🏠 Menu']);
+    }
+  },
+  pmkisan: {
+    keys:['pm kisan','pmkisan','kisan yojana','किसान','किस्त','fasal bima'],
+    fn:(t)=>{
+      if(t.includes('kyc')||t.includes('ekyc')||t.includes('केवाईसी')) return r(`📱 <b>PM Kisan e-KYC</b><br><br>⚠️ <b>BAHUT ZARURI — Bina e-KYC kist band!</b><br>✅ Sirf 5 minute ka kaam<br>✅ Aadhaar + linked mobile chahiye<br>✅ <b>Charges: ₹30</b><br>📞 <b>8210073056</b>`,['🌾 PM Kisan','📝 Registration','🏠 Menu']);
+      if(t.includes('status')||t.includes('check')||t.includes('kab aaya')) return r(`🔍 <b>PM Kisan Status Check</b><br><br>✅ Installment aaya ya nahi<br>✅ Bank details verify<br>✅ <b>Charges: ₹20</b><br>📞 <b>8210073056</b><br>Ya: <b>pmkisan.gov.in</b>`,['📱 e-KYC','🌾 PM Kisan','🏠 Menu']);
+      return r(`🌾 <b>PM Kisan Samman Nidhi</b><br><br>✅ Naya registration — ₹100<br>✅ e-KYC (ZARURI!) — ₹30<br>✅ Status check — ₹20<br>✅ Bank update — ₹50<br><br>⚠️ <b>e-KYC nahi to ₹6000/saal ki kist nahi aayegi!</b><br>📞 <b>8210073056</b>`,['📱 e-KYC','📝 Registration','🔍 Status','🏠 Menu']);
+    }
+  },
+
+  // EPF / PF
+  epf: {
+    keys:['epf','pf','provident fund','employee provident','ईपीएफ','भविष्य निधि','pf withdrawal','pf balance'],
+    fn:(t)=>{
+      if(t.includes('withdraw')||t.includes('nikaln')||t.includes('nikalna')||t.includes('claim')) return r(`💼 <b>EPF/PF Withdrawal (Claim)</b><br><br>✅ <b>Online claim</b> EPFO portal se hoti hai<br>✅ UAN activate hona chahiye<br>✅ Aadhaar + bank linked hona zaruri<br><br><b>Documents:</b><br>• UAN number<br>• Aadhaar card<br>• Bank passbook<br>• Cancelled cheque<br><br>⏰ Paise 15-20 din mein aate hain<br><br>📞 <b>8210073056</b> — hum online claim mein help karte hain!`,['💼 PF Balance','🔗 UAN Link','🏠 Menu']);
+      if(t.includes('balance')||t.includes('check')||t.includes('kitna')) return r(`🔍 <b>EPF Balance Check</b><br><br>✅ <b>3 tarike:</b><br>1️⃣ SMS: EPFOHO UAN ENG → 7738299899<br>2️⃣ Missed call: 011-22901406<br>3️⃣ App: UMANG ya epfindia.gov.in<br><br>UAN number aur registered mobile chahiye<br>📞 <b>8210073056</b>`,['💼 PF Withdrawal','🏠 Menu']);
+      if(t.includes('uan')||t.includes('activate')||t.includes('login')) return r(`🔑 <b>UAN Activation</b><br><br>✅ UAN: Employer deta hai (salary slip par)<br>✅ <b>Activate kaise karein:</b><br>• unifiedportal-mem.epfindia.gov.in par jaayein<br>• "Activate UAN" select karein<br>• Mobile OTP se verify karein<br><br>📞 <b>8210073056</b> — hum help karte hain!`,['💼 PF Withdrawal','🔍 PF Balance','🏠 Menu']);
+      return r(`🏦 <b>EPF / Provident Fund — Jankari</b><br><br>✅ <b>Kya hai:</b> Naukri karne walo ke liye savings scheme<br>✅ Salary ka 12% + employer 12% = total 24% jama hota hai<br>✅ Interest rate: ~8.25% per saal<br>✅ Retirement, medical, ghar, education ke liye nikaal sakte hain<br><br><b>Hamari Help:</b><br>• PF balance check<br>• Online claim/withdrawal<br>• UAN activation<br>• Passbook download<br><br>📞 <b>8210073056</b>`,['💼 PF Withdrawal','🔍 PF Balance','🔑 UAN','🏠 Menu']);
+    }
+  },
+
+  // SUKANYA SAMRIDDHI
+  sukanya: {
+    keys:['sukanya','sukanya samriddhi','सुकन्या','beti','daughter scheme','beti bachao','girl child'],
+    fn:(t)=>{
+      return r(`👧 <b>Sukanya Samriddhi Yojana</b><br><br>🌟 <b>Beti ke liye sabse best scheme!</b><br><br>✅ <b>Kaun khol sakta hai:</b> 10 saal se kam beti ke liye<br>✅ <b>Interest rate:</b> 8.2% per saal (tax-free!)<br>✅ <b>Min deposit:</b> ₹250/saal<br>✅ <b>Max deposit:</b> ₹1.5 lakh/saal<br>✅ <b>Maturity:</b> Beti ki 21 saal ki umra par<br>✅ <b>Tax benefit:</b> Section 80C mein ₹1.5L tak<br>✅ Partial withdrawal 18 saal par (padhai ke liye)<br><br><b>Documents:</b> Beti ka birth certificate + Mata-pita ka Aadhaar + PAN<br><b>Kahan kholein:</b> Post Office ya kisi bhi bank mein<br><br>📞 <b>8210073056</b> — hum account kholne mein help karte hain!`,['🏦 PPF Account','💰 Loan','🏠 Menu']);
+    }
+  },
+
+  // PM AWAS YOJANA
+  pmawas: {
+    keys:['pm awas','awas yojana','pmay','pradhan mantri awas','ghar ke liye','house scheme','awas','housing','मकान yojana'],
+    fn:(t)=>{
+      return r(`🏠 <b>PM Awas Yojana (PMAY)</b><br><br>🌟 <b>Sarkar se ghar banwane mein madad!</b><br><br>✅ <b>Subsidy milti hai:</b> ₹1.5 lakh se ₹2.67 lakh tak<br>✅ <b>2 categories:</b><br>• PMAY-Gramin (Gaon ke liye)<br>• PMAY-Urban (Shehar ke liye)<br><br><b>✅ Kaun apply kar sakta hai:</b><br>• Ghar nahi hai ya kaccha ghar hai<br>• Annual income ₹3L-18L tak<br>• Mahila ka naam ghar mein hona chahiye<br><br><b>Documents:</b><br>• Aadhaar card (puri family ka)<br>• Income certificate<br>• Bank passbook<br>• Jameen ke kagaz (gramin ke liye)<br><br>⚠️ <b>Apply karne ke liye:</b> Block office ya CSC center par jaayein<br><br>📞 <b>8210073056</b> — form bharne mein help lein!`,['💰 Home Loan','📄 Income Certificate','🏠 Menu']);
+    }
+  },
+
+  // BIJLI - ELECTRIC METER
+  bijli: {
+    keys:['bijli','electricity','electric meter','new connection','meter','light connection','बिजली','मीटर','कनेक्शन'],
+    fn:(t)=>{
+      if(t.includes('bill')||t.includes('payment')||t.includes('jama')) return r(`💡 <b>Bijli Bill Payment</b><br><br>✅ Online bill pay karein: BHIM, PhonePe, Paytm se<br>✅ Ya seedha BSPHCL website par<br>✅ Consumer number se bill check karein<br><br>📞 <b>8210073056</b> — hum online payment mein help karte hain!`,['⚡ New Connection','🏠 Menu']);
+      if(t.includes('complaint')||t.includes('problem')||t.includes('kharab')||t.includes('nahi aa rahi')) return r(`⚠️ <b>Bijli Complaint</b><br><br>✅ <b>Bihar BSPHCL helpline:</b> 1912 (toll free)<br>✅ Online complaint: bsphcl.bih.nic.in<br>✅ Nearest lineman se bhi contact karein<br><br>📞 <b>8210073056</b>`,['⚡ New Connection','🏠 Menu']);
+      return r(`⚡ <b>New Electric Meter Connection</b><br><br>✅ <b>Naya connection kaise lein:</b><br>1. BSPHCL office ya online apply karein<br>2. Inspection hogi<br>3. Meter lag jayega<br><br><b>Documents zaruri:</b><br>• Aadhaar card<br>• Ghar ke kagaz (Jameen ka record)<br>• Passport photo<br>• Application form<br><br>✅ <b>Connection types:</b><br>• Domestic (ghar ke liye)<br>• Commercial (dukaan ke liye)<br>• Agricultural (khet ke liye)<br><br>📞 <b>8210073056</b> — form bharne mein help lein!`,['💡 Bill Payment','⚠️ Complaint','🏠 Menu']);
+    }
+  },
+
+  // DAKHIL KHARIJ / LAND RECORDS
+  dakhil: {
+    keys:['dakhil kharij','dakhil','kharij','jameen','land record','mutation','registry','जमीन','दाखिल खारिज','खाता','खसरा','रसीद'],
+    fn:(t)=>{
+      if(t.includes('registry')||t.includes('sale deed')||t.includes('bikri')) return r(`📝 <b>Zameen Ki Registry</b><br><br>✅ <b>Kaise hoti hai:</b><br>1. Buyer-Seller agreement<br>2. Stamp duty payment (jameen ki kimat ka 6%)<br>3. Sub-Registrar office mein registration<br>4. Dono parties ka aana zaruri<br><br><b>Documents:</b><br>• Seller ka zameen ka khasra/khata<br>• Dono ka Aadhaar + PAN<br>• Photo<br>• Stamp paper<br><br>📞 <b>8210073056</b>`,['📜 Dakhil Kharij','🏠 Menu']);
+      if(t.includes('rasid')||t.includes('receipt')||t.includes('rajan')||t.includes('tax')) return r(`🧾 <b>Zameen Ki Rasid (Tax)</b><br><br>✅ Har saal jameen ka tax bharna padta hai<br>✅ Bihar mein: biharbhumi.bihar.gov.in par online<br>✅ Ya Block/Panchayat office par bhi<br><br><b>Documents:</b> Khata number + Khasra number<br><br>📞 <b>8210073056</b>`,['📜 Dakhil Kharij','🏠 Menu']);
+      return r(`📜 <b>Zameen Dakhil Kharij (Mutation)</b><br><br>🌟 <b>Kya hai:</b> Zameen khareedne ke baad apne naam transfer karna<br><br>✅ <b>Online apply karein:</b> biharbhumi.bihar.gov.in<br>✅ Ya Block Development Office par<br><br><b>Documents zaruri:</b><br>• Sale deed / Registry copy<br>• Khata Khasra (purani zameen ki)<br>• Seller ka Aadhaar<br>• Buyer ka Aadhaar<br>• Zameen rasid (tax receipt)<br><br>⏰ <b>Time:</b> 30-60 din mein ho jaata hai<br>✅ <b>Charges:</b> ₹200-500 (sarkari fees + service charge)<br><br>📞 <b>8210073056</b> — apply karne mein help lein!`,['📝 Registry','🧾 Rasid/Tax','🏠 Menu']);
+    }
+  },
+
+  // SCHOLARSHIP
+  scholarship: {
+    keys:['scholarship','scholarshi','छात्रवृत्ति','scholership','students help','padhai','education help','free education','sc st obc scholarship'],
+    fn:(t)=>{
+      return r(`🎓 <b>Scholarship — Chhatravritti</b><br><br>✅ <b>Bihar ke liye main schemes:</b><br><br>🔸 <b>NSP (National Scholarship Portal)</b><br>• SC/ST/OBC students ke liye<br>• scholarships.gov.in par apply<br><br>🔸 <b>Bihar State Scholarship</b><br>• Class 1-12 ke liye<br>• SC/ST: ₹1800-₹5400/saal<br>• OBC: ₹600-₹1200/saal<br><br>🔸 <b>Mukhyamantri Kanya Utthan</b><br>• Beti ke liye — ₹25,000 graduation par<br><br>🔸 <b>Post Matric Scholarship</b><br>• 10th ke baad padhai ke liye<br><br><b>Documents:</b><br>• Aadhaar + Income certificate<br>• Caste certificate + Marksheet<br>• Bank passbook<br><br>📞 <b>8210073056</b> — form bharne mein help lein!`,['📄 Income Certificate','📄 Caste Certificate','🏠 Menu']);
+    }
+  },
+
+  // SHARE MARKET
+  sharemarket: {
+    keys:['share market','stock market','mutual fund','sip','nifty','sensex','demat','share kharidna','शेयर मार्केट','निवेश','invest','trading','zerodha','upstox','ipo','dividend'],
+    fn:(t)=>{
+      if(t.includes('mutual fund')||t.includes('sip')) return r(`📊 <b>Mutual Fund / SIP</b><br><br>🌟 <b>Share market se safe investment!</b><br><br>✅ <b>SIP kya hai:</b> Har mahine chhoti rashi invest karein<br>✅ <b>Min SIP:</b> ₹500/month se shuru<br>✅ <b>Long term return:</b> 12-15% per saal (average)<br><br><b>Types:</b><br>• Equity Fund — zyada return, zyada risk<br>• Debt Fund — safe, kam return<br>• Hybrid Fund — balance<br><br><b>Kaise shuru karein:</b><br>1. KYC karein (Aadhaar + PAN)<br>2. Groww / Zerodha Coin / HDFC Sky app se<br>3. Fund choose karein<br>4. SIP start karein!<br><br>📞 <b>8210073056</b>`,['📈 Share Market','💰 Investment','🏠 Menu']);
+      if(t.includes('demat')||t.includes('account')||t.includes('zerodha')||t.includes('upstox')) return r(`📂 <b>Demat Account Opening</b><br><br>✅ <b>Kahan kholein:</b><br>• Zerodha — ₹200 account fee<br>• Upstox — FREE<br>• Angel One — FREE<br>• Groww — FREE<br><br><b>Documents:</b><br>• Aadhaar + PAN (mandatory!)<br>• Bank account<br>• Selfie + Signature<br><br>✅ Online 15 minute mein account khul jata hai<br>✅ PAN card hona zaruri hai!<br><br>📞 <b>8210073056</b> — PAN card banwao, phir account kholo!`,['🗂️ PAN Card','📈 Share Market Basics','🏠 Menu']);
+      if(t.includes('ipo')) return r(`🆕 <b>IPO — Initial Public Offering</b><br><br>✅ <b>Kya hai:</b> Jab koi company pehli baar share baazaar mein aati hai<br>✅ Hume chance milta hai saste mein shares kharidne ka<br>✅ Listing par faayda hota hai (kabhi kabhi loss bhi)<br><br><b>Kaise apply karein:</b><br>1. Demat account hona chahiye<br>2. UPI ID honi chahiye<br>3. App se apply karein (Groww, Zerodha)<br>4. Allotment hogi to shares milenge<br><br>📞 <b>8210073056</b>`,['📂 Demat Account','📈 Share Market','🏠 Menu']);
+      return r(`📈 <b>Share Market — Poori Jankari</b><br><br>🌟 <b>Share market mein kaise invest karein?</b><br><br>✅ <b>Step 1:</b> PAN card banwao (mandatory!)<br>✅ <b>Step 2:</b> Demat account kholo (Zerodha/Upstox/Groww)<br>✅ <b>Step 3:</b> Bank account link karo<br>✅ <b>Step 4:</b> Paisa invest karo<br><br><b>⚠️ Risk samjho:</b><br>• Share market mein risk hota hai<br>• Pehle seekho, phir invest karo<br>• SIP se safe shuruat karein<br>• Kabhi loan lekar invest mat karo!<br><br><b>Aaj ke market:</b><br>• Nifty 50: ~23,000 (approx)<br>• Sensex: ~76,000 (approx)<br><br>📞 <b>8210073056</b>`,['📊 Mutual Fund/SIP','📂 Demat Account','🆕 IPO','🏠 Menu']);
+    }
+  },
+
+  // PPF
+  ppf: {
+    keys:['ppf','public provident','पीपीएफ','post office saving','post office account'],
+    fn:(t)=>{
+      return r(`💰 <b>PPF — Public Provident Fund</b><br><br>✅ <b>Interest:</b> 7.1% (tax-free!)<br>✅ <b>Min:</b> ₹500/saal | <b>Max:</b> ₹1.5 lakh/saal<br>✅ <b>Maturity:</b> 15 saal (extend bhi ho sakta hai)<br>✅ <b>Tax benefit:</b> 80C mein ₹1.5L tak<br>✅ Lock-in: 15 saal (7 saal baad partial withdrawal)<br><br><b>Kahan kholein:</b> Post Office ya SBI/PNB mein<br><b>Documents:</b> Aadhaar + PAN + Photo<br><br>📞 <b>8210073056</b>`,['👧 Sukanya','🏦 EPF','🏠 Menu']);
+    }
+  },
+
+  // VOTER / DRIVING / CERTIFICATE
+  voter: {
+    keys:['voter id','voter card','vote','matdata','मतदाता','वोटर'],
+    fn:()=>r(`🗳️ <b>Voter ID Services</b><br><br>✅ Naya registration<br>✅ Correction/update<br>✅ Address transfer<br>✅ Download & print<br><br><b>Documents:</b> Aadhaar + Photo<br><b>Charges: ₹50-100</b><br>📞 <b>8210073056</b>`,['🪪 Aadhaar','📄 Certificate','🏠 Menu'])
+  },
+  dl: {
+    keys:['driving licence','driving license','dl banwana','ड्राइविंग','लाइसेंस','license banana'],
+    fn:(t)=>{
+      if(t.includes('renewal')||t.includes('renew')||t.includes('expire')) return r(`🔄 <b>DL Renewal</b><br><br>✅ Old DL + Aadhaar + Medical certificate<br>✅ <b>Charges: ₹300-500</b><br>📞 <b>8210073056</b>`,['🚗 Naya DL','🏠 Menu']);
+      return r(`🚗 <b>Driving Licence Services</b><br><br>✅ Learning Licence (LL)<br>✅ Permanent DL<br>✅ Renewal, Duplicate<br><b>Charges: ₹200-500</b><br>📞 <b>8210073056</b>`,['🆕 Naya DL','🔄 Renewal','🏠 Menu']);
+    }
+  },
+  certificate: {
+    keys:['certificate','jati','caste','cast','जाति','income','aay','आय','niwas','निवास','praman','प्रमाण','residence cert'],
+    fn:()=>r(`📄 <b>Government Certificates</b><br><br>✅ Jati Praman Patra (Caste)<br>✅ Aay Praman Patra (Income)<br>✅ Niwas Praman Patra (Residence)<br><br><b>Documents:</b> Aadhaar + Ration card + Photo<br><b>Charges: ₹100-200 | Time: 3-7 din</b><br>📞 <b>8210073056</b>`,['🪪 Aadhaar','🗳️ Voter ID','🏠 Menu'])
+  },
+  insurance: {
+    keys:['insurance','bima','बीमा','pmjjby','pmsby','jeevan bima','accident insurance'],
+    fn:(t)=>{
+      if(t.includes('pmjjby')||t.includes('jeevan')||t.includes('life')) return r(`❤️ <b>PMJJBY — Jeevan Bima</b><br><br>✅ Sirf <b>₹436/saal</b> mein ₹2 lakh life insurance<br>✅ 18-50 saal apply kar sakte hain<br>✅ Mrityu par family ko ₹2L milega<br><br><b>Charges: ₹50</b><br>📞 <b>8210073056</b>`,['🛡️ PMSBY','💰 APY','🏠 Menu']);
+      if(t.includes('pmsby')||t.includes('accident')||t.includes('durghatna')) return r(`🛡️ <b>PMSBY — Accident Insurance</b><br><br>✅ Sirf <b>₹20/saal</b> mein ₹2 lakh cover<br>✅ Disability par bhi milega<br><br><b>Charges: ₹30</b><br>📞 <b>8210073056</b>`,['❤️ PMJJBY','💰 APY','🏠 Menu']);
+      return r(`🛡️ <b>Insurance & Pension</b><br><br>✅ PMJJBY — Jeevan Bima ₹436/saal<br>✅ PMSBY — Accident ₹20/saal<br>✅ APY — Pension Yojana<br>✅ PMFBY — Fasal Bima<br><br>📞 <b>8210073056</b>`,['❤️ Jeevan Bima','🛡️ Accident Bima','💰 APY','🏠 Menu']);
+    }
+  },
+  loan: {
+    keys:['loan','लोन','emi','mudra loan','home loan','personal loan','business loan','bike loan','car loan'],
+    fn:(t)=>{
+      if(t.includes('home')||t.includes('ghar')||t.includes('makan')||t.includes('house')) return r(`🏠 <b>Home Loan</b><br><br>✅ Ghar kharidne ya banwane ke liye<br>✅ 20-30 saal tak EMI<br>✅ Interest: 8.5-10% per saal<br><br><b>Documents:</b> Aadhaar + PAN + Income proof + Property papers<br><br>📞 <b>8210073056</b>`,['🏠 PM Awas','💰 Loan','🏠 Menu']);
+      if(t.includes('mudra')||t.includes('business')||t.includes('vyapar')) return r(`💼 <b>MUDRA / Business Loan</b><br><br>✅ Shishu: ₹50,000 tak (no collateral)<br>✅ Kishore: ₹50K - ₹5L<br>✅ Tarun: ₹5L - ₹10L<br><br><b>Documents:</b> Aadhaar + PAN + Business proof + Bank 6 months<br>📞 <b>8210073056</b>`,['🏦 Bank Account','📊 GST','🏠 Menu']);
+      return r(`💰 <b>Loan Services</b><br><br>✅ Two/Three/Four Wheeler Loan<br>✅ Business Loan / MUDRA<br>✅ Personal Loan<br>✅ Home Loan<br>✅ LAP (Zameen/Ghar par loan)<br><br>📞 <b>8210073056</b>`,['🏍️ Bike Loan','🚗 Car Loan','💼 Business Loan','🏠 Menu']);
+    }
+  },
+  gst: {
+    keys:['gst','जीएसटी','goods service tax','gst return','gst number','gst registration'],
+    fn:()=>r(`📊 <b>GST Registration & Return</b><br><br>✅ Naya GST number apply<br>✅ Monthly/Quarterly return filing<br>✅ GST cancellation<br><br><b>Zaruri agar turnover > ₹20L (service) / ₹40L (goods)</b><br><br><b>Charges: ₹500-1000</b><br>📞 <b>8210073056</b>`,['💼 Business Loan','🏦 Account','🏠 Menu'])
+  },
+  exam: {
+    keys:['exam form','ssc','rrb','upsc','police exam','army exam','ibps','sbi exam','ctet','competitive exam','परीक्षा','exam fee'],
+    fn:()=>r(`📝 <b>Competitive Exam Forms</b><br><br>✅ Railway (RRB/RRC/NTPC)<br>✅ SSC (CGL/CHSL/MTS/GD)<br>✅ UPSC / State PSC<br>✅ Police & Army<br>✅ Bank (IBPS/SBI/RBI)<br>✅ Teaching (CTET/BTET)<br>✅ Sab state exams<br><br><b>Charges: ₹30-100/form</b><br>📞 <b>8210073056</b>`,['🪪 Aadhaar','🗂️ PAN','🏠 Menu'])
+  },
+  flight: {
+    keys:['flight','hawai','हवाई','फ्लाइट','air ticket','airplane'],
+    fn:()=>r(`✈️ <b>Flight Ticket Booking</b><br><br>✅ Domestic — IndiGo, Air India, SpiceJet<br>✅ International flights bhi<br>✅ Sabse sasta fare dhundhte hain<br><br><b>Charges: ₹100-200/ticket</b><br>📞 <b>8210073056</b>`,['🚂 Train Ticket','🏠 Menu'])
+  },
+  wifi: {
+    keys:['wifi','wi-fi','internet','broadband','वाईफाई','इंटरनेट','net connection'],
+    fn:()=>r(`📶 <b>WiFi Installation Service</b><br><br>✅ Ghar/dukaan/office mein setup<br>✅ High speed broadband connection<br>✅ Router install & configure<br>✅ Optical Fibre / BSNL / Airtel / Jio<br><br>💰 <b>Rate: Kaam ke hisaab se — call karein!</b><br>📞 <b>8210073056</b><br>📍 Bachharpur Bazar, Dumra, Sitamarhi`,['📢 Advertisement','📞 Contact','🏠 Menu'])
+  },
+  ad: {
+    keys:['advertisement','video banao','audio ad','विज्ञापन','marketing','brand','prachar','video ad','audio advertisement','channel'],
+    fn:(t)=>{
+      if(t.includes('audio')||t.includes('radio')) return r(`🎙️ <b>Audio Advertisement Service</b><br><br>✅ Professional Hindi audio ad<br>✅ Shop/business/event ke liye<br>✅ Natural Indian voice mein<br>✅ WhatsApp/Social media ready format<br><br>💰 <b>Rate: ₹200-1000</b> (length & quality ke hisaab se)<br>📞 <b>8210073056</b><br>📍 Bachharpur Bazar, Dumra, Sitamarhi`,['🎬 Video Ad','📞 Contact','🏠 Menu']);
+      if(t.includes('video')) return r(`🎬 <b>Video Advertisement Service</b><br><br>✅ Professional video ad banate hain<br>✅ Dukaan, school, event, business ke liye<br>✅ Hindi/Local language mein<br>✅ YouTube, Facebook, WhatsApp ke liye ready<br><br>💰 <b>Rate: ₹500-2000</b> (quality & duration ke hisaab se)<br>📞 <b>8210073056</b><br>📍 Bachharpur Bazar, Dumra, Sitamarhi`,['🎙️ Audio Ad','📞 Contact','🏠 Menu']);
+      return r(`📢 <b>Advertisement Services</b><br><br>✅ 🎙️ Audio Ad — ₹200-1000<br>✅ 🎬 Video Ad — ₹500-2000<br>✅ 📱 WhatsApp Promotion<br>✅ 📘 Social Media Marketing<br>✅ 🏪 Shop/Business/Event promotion<br><br>💰 <b>Rate kaam ke hisaab se hogi</b><br>📞 <b>8210073056</b> par call karein!`,['🎙️ Audio Ad','🎬 Video Ad','📞 Contact','🏠 Menu'])
+    }
+  },
+  itr: {
+    keys:['itr','income tax','tax filing','tax return','आयकर','टैक्स','tax refund','form 16'],
+    fn:(t)=>{
+      if(t.includes('refund')||t.includes('wapas')) return r(`💰 <b>Income Tax Refund</b><br><br>✅ ITR file karenge to refund milega<br>✅ Salary walo ko Form 16 chahiye<br>✅ Refund time: 2-3 mahine<br><br>💰 <b>Charges: ₹200-500</b><br>📞 <b>8210073056</b>`,['📊 GST','🏠 Menu']);
+      return r(`📝 <b>ITR — Income Tax Return Filing</b><br><br>✅ Salaried employees ke liye<br>✅ Business owners ke liye<br>✅ Tax refund claim<br>✅ Deadline: 31 July (every year)<br><br>📋 <b>Documents:</b><br>• PAN + Aadhaar<br>• Form 16 (job walo ke liye)<br>• Bank statement<br>• Investment proofs<br><br>💰 <b>Charges: ₹200-500</b><br>📞 <b>8210073056</b>`,['📊 GST','💼 Loan','🏠 Menu'])
+    }
+  },
+  demat: {
+    keys:['demat','share market account','trading account','zerodha','upstox','groww','angel one','stock account','शेयर अकाउंट'],
+    fn:()=>r(`📈 <b>Demat Account Opening</b><br><br>✅ Share market mein invest karne ke liye zaruri<br>✅ Zerodha / Upstox / Angel One / Groww<br>✅ Free ya ₹200 account opening fee<br><br>📋 <b>Documents:</b><br>• PAN Card (mandatory!)<br>• Aadhaar Card<br>• Bank account<br>• Selfie + Signature<br><br>⏰ 15-20 minute mein account ready!<br><br>💰 <b>Hamari service: ₹100-200</b><br>📞 <b>8210073056</b><br>📍 Bachharpur Bazar, Dumra, Sitamarhi`,['🗂️ PAN Card','📈 Share Market','🏠 Menu'])
+  },
+  pmawas: {
+    keys:['pm awas','awas yojana','pmay','pradhan mantri awas','ghar ke liye','house scheme','awas','housing','मकान yojana','ghar yojana'],
+    fn:(t)=>{
+      if(t.includes('status')||t.includes('check')||t.includes('kab')) return r(`🔍 <b>PM Awas Status Check</b><br><br>✅ Application ka status check karein<br>✅ pmaymis.gov.in par check kar sakte hain<br><br>💰 <b>Charges: ₹50</b><br>📞 <b>8210073056</b>`,['🏠 PM Awas Apply','🏠 Menu']);
+      return r(`🏠 <b>PM Awas Yojana — Gramin & Shahari</b><br><br>🌟 <b>Garib pariwar ko pucca ghar milta hai!</b><br><br>✅ <b>Gramin (PMAY-G):</b> ₹1.20 lakh - ₹1.30 lakh<br>✅ <b>Shahari (PMAY-U):</b> Subsidy milti hai<br><br>📋 <b>Kaun apply kar sakta hai:</b><br>• Kachcha ghar ya jhopdi honi chahiye<br>• Naam BPL list mein hona chahiye<br>• Pehle se pucca ghar nahi hona chahiye<br><br>📋 <b>Documents:</b><br>• Aadhaar + Bank passbook<br>• Ration card + BPL card<br>• Zameen ka proof<br>• Photo<br><br>💰 <b>Charges: ₹200-500</b><br>📞 <b>8210073056</b><br>📍 Bachharpur Bazar, Dumra, Sitamarhi`,['🔍 Status Check','📜 Dakhil Kharij','📞 Contact','🏠 Menu'])
+    }
+  },
+  contact: {
+    keys:['contact','address','kahan hai','pata','timing','kab khulte','phone number','कहाँ','पता','फोन','location','shop','dukaan'],
+    fn:()=>r(`📞 <b>DigiTech Cyber — Hamara Pata</b><br><br>📍 <b>Bachharpur Bazar</b><br>Azamgarh Panchayat, Dumra<br>Sitamarhi, Bihar — 843323<br><br>📱 <b>8210073056</b><br>⏰ Somwar–Shanivaar: 9 AM – 6 PM<br><br>🟢 <b>Koi bhi kaam — call karein ya seedha aayein!</b><br>WhatsApp bhi available hai!`,['📋 All Services','🏠 Menu'])
+  },
+  all: {
+    keys:['sab services','all service','sabhi','kya kya hai','services list','सब services','rate list','kitna lagta'],
+    fn:()=>r(`📋 <b>DigiTech Cyber — Saari Services & Rates</b><br><br>🪪 <b>Aadhaar:</b> Update ₹100 | Mobile Link ₹100 | Print ₹20<br>🗂️ <b>PAN Card:</b> Naya ₹150 | Link ₹50<br>🗳️ <b>Voter ID:</b> ₹50-100<br>🚗 <b>Driving Licence:</b> ₹200-500<br>📄 <b>Certificate</b> (Jati/Aay/Niwas): ₹100-200<br>🚂 <b>Train Ticket:</b> ₹30-50 | Tatkal ₹50+<br>✈️ <b>Flight Ticket:</b> ₹100-200<br>🌾 <b>PM Kisan:</b> Registration ₹100 | eKYC ₹30<br>🏠 <b>PM Awas:</b> Apply ₹200-500<br>📜 <b>Dakhil Kharij:</b> ₹200-500<br>📊 <b>GST:</b> Registration ₹500+ | Return ₹300+<br>📝 <b>ITR Filing:</b> ₹200-500<br>📝 <b>Exam Form:</b> ₹30-100<br>📈 <b>Demat Account:</b> ₹100-200<br>📶 <b>WiFi Installation:</b> Call karein<br>🎬 <b>Video/Audio Ad:</b> Call karein<br>💰 <b>Loan:</b> Call karein<br><br>📞 <b>8210073056</b> | ⏰ 9AM-6PM<br>📍 Bachharpur Bazar, Dumra, Sitamarhi`,['📞 Contact','🏠 Menu'])
+  }
+};
+
+// GENERAL KNOWLEDGE
+const GK = {
+  // FINANCE BASICS
+  finance: {
+    keys:['fd','fixed deposit','recurring','rd','savings rate','inflation','महंगाई','ब्याज दर','interest rate'],
+    fn:(t)=>{
+      if(t.includes('fd')||t.includes('fixed deposit')) return r(`🏦 <b>FD — Fixed Deposit</b><br><br>✅ <b>Current rates (approx):</b><br>• SBI: 6.5-7.5% per saal<br>• Post Office: 7.5% per saal<br>• Small Finance Banks: 8-9%<br><br>✅ Senior citizens ko 0.5% extra milta hai<br>✅ Tax: Interest par TDS lagta hai<br>✅ Safe investment — koi risk nahi<br><br>📞 <b>8210073056</b>`,['💰 PPF','📊 Mutual Fund','🏠 Menu']);
+      return r(`💰 <b>Finance Basics</b><br><br>Kaunsi investment ke baare mein jaanna chahte hain?`,['🏦 FD','💰 PPF','📊 Mutual Fund/SIP','📈 Share Market']);
+    }
+  },
+  // RATION CARD
+  ration: {
+    keys:['ration card','ration','राशन','bpl','apl card','food security'],
+    fn:()=>r(`🛒 <b>Ration Card Services</b><br><br>✅ <b>Naya ration card:</b> Block office ya CSC center<br>✅ <b>Correction:</b> Name, address, family member<br>✅ Aadhaar se link karna zaruri hai<br>✅ PM Garib Kalyan scheme ka fayda<br><br><b>Documents:</b> Aadhaar + Photo + Income proof<br><br>📞 <b>8210073056</b> — help ke liye call karein!`,['📄 Certificate','🏠 PM Awas','🏠 Menu'])
+  },
+  // AYUSHMAN BHARAT
+  ayushman: {
+    keys:['ayushman','ayushman bharat','health card','pmjay','golden card','health scheme','5 lakh','hospital free'],
+    fn:()=>r(`🏥 <b>Ayushman Bharat — PMJAY</b><br><br>🌟 <b>₹5 lakh tak free hospital treatment!</b><br><br>✅ <b>Kaun eligible hai:</b><br>• SECC data mein naam hona chahiye<br>• Ration card BPL wale<br>• Garib pariwar<br><br>✅ <b>Kaise check karein:</b><br>pmjay.gov.in → "Am I Eligible" → Mobile number enter<br><br>✅ <b>Card banwana:</b> CSC center ya Ayushman Mitra se<br><br><b>Documents:</b> Aadhaar + Ration card<br><br>📞 <b>8210073056</b>`,['🏠 PM Awas','📄 Certificate','🏠 Menu'])
+  },
+  // NREGA / MNREGA
+  nrega: {
+    keys:['nrega','mnrega','job card','mahatma gandhi','100 din','rozgar guarantee','मनरेगा','जॉब कार्ड'],
+    fn:()=>r(`🔨 <b>MNREGA — Job Card</b><br><br>✅ <b>Kya milta hai:</b> 100 din ka guaranteed kaam<br>✅ <b>Wages:</b> Bihar mein ~₹228/din<br>✅ Doosra source na ho to apply karein<br><br>✅ <b>Job Card kaise banwayein:</b><br>1. Gram Panchayat office jaayein<br>2. Application dein<br>3. 15 din mein card milega<br><br><b>Documents:</b> Aadhaar + Photo + Residence proof<br><br>📞 <b>8210073056</b>`,['🌾 PM Kisan','🏠 PM Awas','🏠 Menu'])
+  },
+  // OLD AGE / WIDOW PENSION
+  pension_social: {
+    keys:['old age pension','widow pension','vidhwa','vridha','vridha pension','बुजुर्ग','विधवा pension','social pension','mukhyamantri pension'],
+    fn:()=>r(`👴 <b>Social Pension Schemes</b><br><br>✅ <b>Mukhyamantri Vridhjan Pension (Bihar):</b><br>• 60+ umra ke sab ko ₹400-500/month<br>• Aadhaar + Bank account chahiye<br><br>✅ <b>Widow Pension:</b><br>• Vidhwa mahilaon ke liye ₹400/month<br>• RTPS se apply<br><br>✅ <b>Divyang Pension:</b><br>• Viklang vyakti ke liye ₹400/month<br><br><b>Kahan apply karein:</b> Block Development Office<br><br>📞 <b>8210073056</b>`,['🏠 PM Awas','📄 Certificate','🏠 Menu'])
+  },
+  // THANKS
+  thanks: {
+    keys:['thanks','thank you','shukriya','dhanyawad','धन्यवाद','शुक्रिया','bahut achha','helpfull','bahut badhiya'],
+    fn:()=>r(`😊 <b>Bahut khushi hui madad karke!</b><br><br>Aur koi bhi sawaal ho — kisi bhi topic par — zaroor poochhen!<br><br>📞 <b>8210073056</b><br>🙏 <b>DigiTech Cyber — Aapki Seva Mein Sada Hazir!</b>`,['📋 All Services','📞 Contact','🏠 Menu'])
+  }
+};
+
+function r(msg, quick=[]) { return {msg, quick}; }
+
+function getResp(text) {
+  const t = text.toLowerCase();
+
+  // Check all knowledge bases
+  const allKBs = {...KB, ...GK};
+  for (const key in allKBs) {
+    const item = allKBs[key];
+    if (item.keys.some(k => t.includes(k))) {
+      return item.fn ? item.fn(t) : r(item.msg || '', item.quick || []);
+    }
+  }
+
+  // Smart keyword detection
+  if(t.includes('menu')||t.includes('wapas')||t.includes('back')||t.includes('home')||t.match(/^(hi|hello|hey|namaste|नमस्ते|हाय)[\s!?]*$/))
+    return r(`🙏 <b>Namaste! Main DigiTech Cyber ka Smart AI hun!</b><br><br>Aap kisi bhi service ke baare mein pooch sakte hain — rate, documents, process — sab bataunga!<br><br>📞 <b>8210073056</b><br>📍 Bachharpur Bazar, Dumra, Sitamarhi`,['🪪 Aadhaar','🚂 Train','🌾 PM Kisan','💰 Loan','🏦 EPF','📈 Share Market','📞 Contact','📋 All']);
+
+  if(t.includes('ok')||t.includes('theek')||t.includes('achha')||t.includes('ठीक'))
+    return r(`😊 Theek hai! Koi aur kaam ho to zaroor batayein!<br>📞 <b>8210073056</b>`,['📋 All Services','📞 Contact']);
+
+  // Default smart response
+  return r(`🤖 <b>"${text}"</b> — is baare mein seedha hamse baat karein:<br><br>📞 <b>8210073056</b><br>📍 Bachharpur Bazar, Dumra, Sitamarhi<br>⏰ 9AM-6PM, Somwar-Shanivaar<br><br>Ya neeche koi service chunein:`,['🪪 Aadhaar','🚂 Train','🌾 PM Kisan','💰 Loan','🏦 EPF','📈 Share Market','📞 Contact','📋 All']);
+}
+
+// ============ VOICE ============
+let hindiVoice = null;
+
+function loadBestHindiVoice() {
+  if(!synth) return;
+  const voices = synth.getVoices();
+
+  // Indian Hindi voices priority order
+  hindiVoice =
+    voices.find(v => v.name === 'Google हिन्दी') ||                    // Android Google Hindi (most natural)
+    voices.find(v => v.name.includes('Hindi') && v.name.includes('Google')) ||
+    voices.find(v => v.lang === 'hi-IN' && v.name.includes('Google')) ||
+    voices.find(v => v.name.includes('Hemant')) ||                      // Microsoft Hemant (Indian male)
+    voices.find(v => v.name.includes('Kalpana')) ||                     // Microsoft Kalpana (Indian female)
+    voices.find(v => v.lang === 'hi-IN' && v.name.includes('Microsoft')) ||
+    voices.find(v => v.lang === 'hi-IN') ||
+    voices.find(v => v.lang.startsWith('hi')) ||
+    null;
+}
+
+function splitPhoneNumber(num) {
+  return num.split('').join(' ');
+}
+
+function cleanTextForSpeech(text) {
+  return text
+    .replace(/<[^>]*>/g, ' ')                                // HTML tags hataao
+    .replace(/[^\u0000-\u007E\u0900-\u097F\s]/g, '')         // Emojis hataao
+    // Natural Hindi number reading
+    .replace(/\b(\d{10})\b/g, m => splitPhoneNumber(m))      // Phone number digit by digit
+    .replace(/₹\s*(\d+)/g, (_, n) => n + ' rupaye ')         // ₹500 → "500 rupaye"
+    .replace(/(\d+)%/g, '$1 pratishat ')                      // 10% → "10 pratishat"
+    .replace(/(\d+)\s*din/g, '$1 din ')                       // "3 din" natural
+    .replace(/(\d+)\s*month/gi, '$1 mahine ')                 // months
+    // Natural pauses
+    .replace(/\b(Documents?|documents?):/g, 'Documents, ')
+    .replace(/•/g, ', ')
+    .replace(/:/g, ', ')
+    .replace(/\//g, ' ya ')                                   // "/" → "ya"
+    .replace(/\|/g, ', ')
+    .replace(/-{2,}/g, ', ')
+    // Common English→Hindi replacements for natural sound
+    .replace(/\bDocuments\b/gi, 'dastaavej')
+    .replace(/\bCharges\b/gi, 'shulk')
+    .replace(/\bTime\b/gi, 'samay')
+    .replace(/\bUpdate\b/gi, 'apdeit')
+    .replace(/\bOnline\b/gi, 'onlain')
+    .replace(/\bForm\b/gi, 'form')
+    .replace(/\bProcess\b/gi, 'prakriya')
+    .replace(/\bEligible\b/gi, 'paatra')
+    .replace(/\bApply\b/gi, 'aavedan karein')
+    .replace(/\bStatus\b/gi, 'sthiti')
+    .replace(/\bAccount\b/gi, 'khata')
+    .replace(/\bService\b/gi, 'seva')
+    .replace(/\bCenter\b/gi, 'kendra')
+    // Clean up
+    .replace(/\s+/g, ' ')
+    .trim()
+    .substring(0, 400);
+}
+
+function speak(text) {
+  if(synth) synth.cancel();
+  if(typeof responsiveVoice !== 'undefined') responsiveVoice.cancel();
+
+  const clean = cleanTextForSpeech(text);
+  if(!clean) return;
+
+  // Priority: Sarvam AI > ResponsiveVoice > Browser
+  if(sarvamKey) {
+    speakSarvam(clean);
+  } else if(typeof responsiveVoice !== 'undefined' && responsiveVoice.voiceSupport()) {
+    responsiveVoice.cancel();
+    responsiveVoice.speak(clean, 'Hindi Female', {
+      rate: 0.9, pitch: 1, volume: 1,
+      onstart: () => { isSpeak=true; setSt('🔊 Bol rahi hun...','speak'); document.getElementById('mbtn').className='mbtn speak'; document.getElementById('mbtn').textContent='🔊'; },
+      onend: () => { isSpeak=false; resetUI(); },
+      onerror: () => { isSpeak=false; resetUI(); speakFallback(clean); }
+    });
+  } else {
+    speakFallback(clean);
+  }
+}
+
+function speakFallback(clean) {
+  if(!synth) return;
+  if(!hindiVoice) loadBestHindiVoice();
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = 'hi-IN'; u.rate = 0.82; u.pitch = 0.95; u.volume = 1;
+  if(hindiVoice) u.voice = hindiVoice;
+  u.onstart = () => { isSpeak=true; setSt('🔊 Bol raha hun...','speak'); document.getElementById('mbtn').className='mbtn speak'; document.getElementById('mbtn').textContent='🔊'; };
+  u.onend = () => { isSpeak=false; resetUI(); };
+  const t = setInterval(()=>{ if(synth.speaking) synth.resume(); }, 5000);
+  u.onend = ()=>{ clearInterval(t); isSpeak=false; resetUI(); };
+  synth.speak(u);
+}
+function resetUI(){ setSt('🎤 Mic dabao ya likhein — koi bhi sawaal poochh sakte hain!'); document.getElementById('mbtn').className='mbtn'; document.getElementById('mbtn').textContent='🎤'; }
+function setSt(t,c=''){ const s=document.getElementById('sbar'); s.textContent=t; s.className='sbar '+c; }
+function toggleMic(){
+  if(isSpeak){
+    if(typeof responsiveVoice !== 'undefined') responsiveVoice.cancel();
+    if(synth) synth.cancel();
+    isSpeak=false; resetUI(); return;
+  }
+  if(isListen){ stopL(); return; }
+  startL();
+}
+function startL(){
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){alert('Voice ke liye Chrome browser use karein!');return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recog=new SR(); recog.lang='hi-IN'; recog.interimResults=true;
+  recog.onstart=()=>{ isListen=true; document.getElementById('mbtn').className='mbtn listen'; document.getElementById('mbtn').textContent='🔴'; setSt('🎤 Sun raha hun... bolein!','listen'); };
+  recog.onresult=(e)=>{ let tr=''; for(let i=e.resultIndex;i<e.results.length;i++) tr+=e.results[i][0].transcript; document.getElementById('tin').value=tr; if(e.results[e.results.length-1].isFinal){stopL();setTimeout(()=>send(),300);} };
+  recog.onerror=()=>stopL();
+  recog.onend=()=>{ if(isListen) stopL(); };
+  recog.start();
+}
+function stopL(){ isListen=false; if(recog) recog.stop(); resetUI(); }
+
+// ============ CHAT ============
+function addMsg(text,isUser){
+  const area=document.getElementById('chat');
+  document.querySelectorAll('.qr-wrap').forEach(e=>e.remove());
+  const div=document.createElement('div'); div.className=`msg ${isUser?'user':'bot'}`;
+  const fmt=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+  div.innerHTML=`${!isUser?'<div class="av">🤖</div>':''}<div class="bubble">${fmt}</div>`;
+  area.appendChild(div); area.scrollTop=area.scrollHeight;
+}
+function addQR(opts){
+  const area=document.getElementById('chat');
+  const div=document.createElement('div'); div.className='qr-wrap';
+  opts.forEach(o=>{ const b=document.createElement('button'); b.className='qr'; b.textContent=o; b.onclick=()=>ask(o); div.appendChild(b); });
+  area.appendChild(div); area.scrollTop=area.scrollHeight;
+}
+function showTyp(){ const area=document.getElementById('chat'); const d=document.createElement('div'); d.className='msg bot'; d.id='typ'; d.innerHTML='<div class="av">🤖</div><div class="typing"><span></span><span></span><span></span></div>'; area.appendChild(d); area.scrollTop=area.scrollHeight; }
+function remTyp(){ const t=document.getElementById('typ'); if(t) t.remove(); }
+
+function ask(q){ addMsg(q,true); process(q); }
+function send(){ const inp=document.getElementById('tin'); const u=inp.value.trim(); if(!u) return; inp.value=''; addMsg(u,true); process(u); }
+
+function process(text){
+  showTyp(); setSt('🧠 Soch raha hun...','think');
+  setTimeout(()=>{
+    remTyp();
+    const resp = getResp(text);
+    addMsg(resp.msg, false);
+    if(resp.quick && resp.quick.length > 0) addQR(resp.quick);
+    speak(resp.msg);
+    setSt('🎤 Mic dabao ya likhein — koi bhi sawaal poochh sakte hain!');
+  }, 500);
+}
+
+if(synth) synth.onvoiceschanged = loadBestHindiVoice;
+
+// ============ SARVAM AI TTS ============
+let sarvamKey = null;
+
+function openApiPanel(){
+  document.getElementById('apiPanel').classList.add('show');
+  // Check if key already saved
+  const saved = localStorage.getItem('sarvam_api_key');
+  if(saved){
+    document.getElementById('apiKeyInput').value = saved;
+    setApiStatus('✅ API key saved hai — active hai!', 'ok');
+    sarvamKey = saved;
+  }
+}
+
+function saveApiKey(){
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if(!key){ setApiStatus('❌ Key daalo pehle!', 'fail'); return; }
+  localStorage.setItem('sarvam_api_key', key);
+  sarvamKey = key;
+  setApiStatus('✅ Saved! Sarvam AI voice active ho gayi! 🎉', 'ok');
+  // Test karo
+  setTimeout(()=> speakSarvam('नमस्ते! सर्वम आवाज़ तैयार है।'), 500);
+}
+
+function clearApiKey(){
+  localStorage.removeItem('sarvam_api_key');
+  sarvamKey = null;
+  document.getElementById('apiKeyInput').value = '';
+  setApiStatus('🗑️ Key hata di — browser voice use hogi', 'info');
+}
+
+function setApiStatus(msg, type){
+  const el = document.getElementById('apiStatus');
+  el.textContent = msg;
+  el.className = 'api-status ' + type;
+}
+
+// Page load par saved key check karo
+window.addEventListener('load', ()=>{
+  const saved = localStorage.getItem('sarvam_api_key');
+  if(saved) sarvamKey = saved;
+  loadBestHindiVoice();
+});
+
+async function speakSarvam(text) {
+  if(!sarvamKey) { speakFallback(text); return; }
+
+  try {
+    isSpeak = true;
+    setSt('🔊 Bol rahi hun...', 'speak');
+    document.getElementById('mbtn').className = 'mbtn speak';
+    document.getElementById('mbtn').textContent = '🔊';
+
+    const response = await fetch('https://api.sarvam.ai/text-to-speech', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-subscription-key': sarvamKey
+      },
+      body: JSON.stringify({
+        inputs: [text.substring(0, 500)],
+        target_language_code: 'hi-IN',
+        speaker: 'anushka',   // Natural Indian Hindi female voice
+        pitch: 0,
+        pace: 1.0,
+        loudness: 1.5,
+        speech_sample_rate: 22050,
+        enable_preprocessing: true,
+        model: 'bulbul:v2'
+      })
+    });
+
+    if(!response.ok) throw new Error('API error');
+
+    const data = await response.json();
+    if(data.audios && data.audios[0]) {
+      // Base64 audio play karo
+      const audio = new Audio('data:audio/wav;base64,' + data.audios[0]);
+      audio.onended = () => { isSpeak = false; resetUI(); };
+      audio.onerror = () => { isSpeak = false; resetUI(); speakFallback(text); };
+      audio.play();
+    } else {
+      throw new Error('No audio');
+    }
+  } catch(err) {
+    console.error('Sarvam error:', err);
+    isSpeak = false;
+    resetUI();
+    // Fallback to browser/ResponsiveVoice
+    speakFallback(text);
+  }
+}
+
+// ============ AUDIO TEST ============
+function openAudioTest(){
+  document.getElementById('audioTest').classList.add('show');
+  runChecks();
+}
+
+function setTestStatus(id, text, type){
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'test-status ' + type;
+}
+
+function runChecks(){
+  // ResponsiveVoice check
+  if(typeof responsiveVoice !== 'undefined' && responsiveVoice.voiceSupport()){
+    setTestStatus('tBrowser','✅ Supported','ok');
+    setTestStatus('tVoice','✅ Hindi Female','ok');
+  } else {
+    setTestStatus('tBrowser','⚠️ Internet chahiye','fail');
+    setTestStatus('tVoice','⚠️ Load ho raha...','check');
+  }
+
+  // Mic check
+  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+    setTestStatus('tMic','🔄 Check ho raha...','check');
+    navigator.mediaDevices.getUserMedia({audio:true})
+      .then(s=>{ s.getTracks().forEach(t=>t.stop()); setTestStatus('tMic','✅ Kaam kar raha','ok'); })
+      .catch(()=>setTestStatus('tMic','❌ Permission nahi mili','fail'));
+  } else {
+    setTestStatus('tMic','❌ Supported nahi','fail');
+  }
+}
+
+function runVoiceTest(){
+  if(typeof responsiveVoice !== 'undefined' && responsiveVoice.voiceSupport()){
+    setTestStatus('tBrowser','✅ Supported','ok');
+    setTestStatus('tVoice','🔊 Hindi Female...','check');
+    responsiveVoice.speak(
+      'नमस्ते! मैं डिजिटेक साइबर की स्मार्ट सहायक हूँ। हमारा फोन नंबर है ' + splitPhoneNumber('8210073056'),
+      'Hindi Female',
+      {
+        rate: 0.9,
+        onstart: ()=> setTestStatus('tVoice','🔊 Bol rahi hun...','check'),
+        onend: ()=> setTestStatus('tVoice','✅ Hindi Female Ready!','ok'),
+        onerror: ()=> setTestStatus('tVoice','❌ Error aaya','fail')
+      }
+    );
+  } else {
+    setTestStatus('tBrowser','❌ Load nahi hua','fail');
+    setTestStatus('tVoice','❌ Internet check karein','fail');
+  }
+}
+</script>
+</body>
+</html>
