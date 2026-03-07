@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>DigiTech Cyber — Ultra Smart AI V8</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+<style>
+:root{
+  --or:#FF6B00;--or2:#ff8c00;--deep:#080814;--card:#0f0f23;--acc:#16163a;
+  --wh:#f0f4ff;--gr:#6b7a9e;--gn:#00e87a;--pu:#a78bfa;--bl:#60a5fa;
+  --border:rgba(255,107,0,0.15);--glass:rgba(255,255,255,0.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Baloo 2','Noto Sans Devanagari',sans-serif;background:var(--deep);display:flex;align-items:center;justify-content:center;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% 20%,rgba(255,107,0,0.07) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(167,139,250,0.05) 0%,transparent 60%);
+}
+
+/* ── WRAP ── */
+.wrap{width:100%;max-width:440px;height:100vh;max-height:820px;display:flex;flex-direction:column;border-radius:0;overflow:hidden;position:relative;}
+@media(min-width:500px){.wrap{border-radius:28px;height:96vh;box-shadow:0 50px 120px rgba(0,0,0,0.8),0 0 0 1px var(--border);}}
+
+/* ── HEADER ── */
+.hdr{
+  background:linear-gradient(135deg,#c44d00,#FF6B00,#ff9500);
+  padding:14px 16px 12px;display:flex;align-items:center;gap:11px;
+  position:relative;overflow:hidden;flex-shrink:0;
+}
+.hdr::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,0.08);border-radius:50%;}
+.hdr::after{content:'';position:absolute;bottom:-50px;left:40%;width:160px;height:160px;background:rgba(255,255,255,0.04);border-radius:50%;}
+.hav{width:44px;height:44px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid rgba(255,255,255,0.35);flex-shrink:0;z-index:1;}
+.hinfo{flex:1;z-index:1;}
+.hinfo h2{color:#fff;font-size:15px;font-weight:800;letter-spacing:0.3px;}
+.hinfo p{color:rgba(255,255,255,0.85);font-size:10.5px;display:flex;align-items:center;gap:4px;}
+.dot{display:inline-block;width:6px;height:6px;background:var(--gn);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.5);}}
+.hbadge{background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:3px 9px;font-size:10px;color:#fff;font-weight:700;z-index:1;flex-shrink:0;}
+.htoolbar{display:flex;gap:6px;z-index:1;}
+.hbtn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s;}
+.hbtn:active{background:rgba(255,255,255,0.3);}
+
+/* ── MEMORY BAR ── */
+.membar{background:rgba(0,232,122,0.08);border-bottom:1px solid rgba(0,232,122,0.15);padding:5px 14px;font-size:11px;color:var(--gn);display:none;align-items:center;gap:6px;flex-shrink:0;}
+.membar.show{display:flex;}
+
+/* ── CHAT ── */
+.chat{flex:1;background:var(--card);overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;}
+.chat::-webkit-scrollbar{width:3px;}
+.chat::-webkit-scrollbar-thumb{background:rgba(255,107,0,0.25);border-radius:4px;}
+.msg{display:flex;gap:8px;animation:fadeUp .35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{flex-direction:row-reverse;}
+.av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--or),#e55a00);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-end;}
+.bubble{max-width:82%;padding:10px 14px;border-radius:18px;font-size:13.5px;line-height:1.75;}
+.bot .bubble{background:var(--acc);color:var(--wh);border-bottom-left-radius:4px;border:1px solid var(--border);}
+.user .bubble{background:linear-gradient(135deg,var(--or),#e55a00);color:#fff;border-bottom-right-radius:4px;}
+
+/* AI badge on bot messages */
+.ai-badge{display:inline-block;background:linear-gradient(135deg,var(--pu),var(--bl));border-radius:6px;padding:1px 6px;font-size:9px;font-weight:700;color:#fff;margin-bottom:4px;letter-spacing:0.5px;}
+
+/* Typing */
+.typing{display:flex;gap:5px;align-items:center;padding:10px 14px;background:var(--acc);border-radius:18px;border-bottom-left-radius:4px;width:fit-content;border:1px solid var(--border);}
+.typing span{width:6px;height:6px;background:var(--gr);border-radius:50%;animation:bounce 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-7px);}}
+
+/* Quick replies */
+.qr-wrap{display:flex;flex-wrap:wrap;gap:5px;padding:2px 0 2px 38px;animation:fadeUp .4s ease;}
+.qr{background:transparent;border:1.5px solid var(--or);color:var(--or);padding:5px 11px;border-radius:18px;font-size:11.5px;font-family:'Baloo 2',sans-serif;cursor:pointer;transition:all .18s;font-weight:600;}
+.qr:active,.qr:hover{background:var(--or);color:#fff;}
+
+/* Service grid */
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;padding:4px 0 4px 38px;animation:fadeUp .4s ease;}
+.svc-card{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:10px 8px;cursor:pointer;transition:all .2s;text-align:center;}
+.svc-card:active{background:rgba(255,107,0,0.15);border-color:var(--or);}
+.svc-card .icon{font-size:20px;display:block;margin-bottom:3px;}
+.svc-card .label{font-size:11px;color:var(--wh);font-weight:600;}
+.svc-card .rate{font-size:10px;color:var(--gn);margin-top:2px;}
+
+/* ── BOTTOM BAR ── */
+.bot-area{background:var(--deep);padding:10px 12px 14px;display:flex;flex-direction:column;gap:8px;border-top:1px solid rgba(255,255,255,.05);flex-shrink:0;}
+.sbar{font-size:11.5px;color:var(--gr);text-align:center;min-height:14px;transition:all .2s;}
+.sbar.listen{color:var(--or);font-weight:600;animation:blink 1s infinite;}
+.sbar.speak{color:var(--gn);font-weight:600;}
+.sbar.think{color:var(--pu);font-weight:600;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.5;}}
+.ctrl{display:flex;gap:8px;align-items:center;}
+.tin{flex:1;background:var(--card);border:1.5px solid rgba(255,107,0,.2);border-radius:24px;padding:11px 16px;color:var(--wh);font-size:14px;font-family:'Baloo 2',sans-serif;outline:none;transition:border .2s;}
+.tin:focus{border-color:var(--or);}
+.tin::placeholder{color:var(--gr);}
+.sbtn{width:42px;height:42px;background:var(--acc);border:1.5px solid rgba(255,107,0,.3);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--or);flex-shrink:0;transition:all .2s;}
+.sbtn:hover{background:var(--or);color:#fff;}
+.mbtn{width:50px;height:50px;background:linear-gradient(135deg,var(--or),#cc4400);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:all .2s;box-shadow:0 4px 20px rgba(255,107,0,.45);}
+.mbtn:active{transform:scale(0.93);}
+.mbtn.listen{background:linear-gradient(135deg,#ef4444,#b91c1c);animation:ripple 1s infinite;}
+.mbtn.speak{background:linear-gradient(135deg,var(--gn),#00b85a);}
+@keyframes ripple{0%,100%{box-shadow:0 4px 20px rgba(239,68,68,.5);}50%{box-shadow:0 4px 30px rgba(239,68,68,.9),0 0 0 8px rgba(239,68,68,.1);}}
+
+/* ── PANELS ── */
+.panel{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(8,8,20,0.97);z-index:100;display:flex;flex-direction:column;padding:20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .3s;border-radius:inherit;}
+.panel.open{opacity:1;pointer-events:all;}
+.panel h3{color:var(--or);font-size:17px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.panel-close{margin-left:auto;background:var(--acc);border:none;border-radius:50%;width:30px;height:30px;color:var(--gr);cursor:pointer;font-size:16px;}
+.panel input,.panel textarea,.panel select{width:100%;background:var(--acc);border:1.5px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--wh);font-size:14px;font-family:inherit;outline:none;transition:border .2s;margin-bottom:10px;}
+.panel input:focus,.panel textarea:focus{border-color:var(--or);}
+.panel label{font-size:12px;color:var(--gr);margin-bottom:4px;display:block;}
+.pbtn{width:100%;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--or),#cc4400);color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:4px;transition:opacity .2s;}
+.pbtn:active{opacity:.85;}
+.pbtn.secondary{background:var(--acc);border:1.5px solid var(--border);color:var(--gr);}
+
+/* Memory cards */
+.mem-item{background:var(--acc);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.mem-item .mlabel{flex:1;font-size:13px;color:var(--wh);}
+.mem-item .mval{font-size:12px;color:var(--or);}
+.mem-del{background:none;border:none;color:var(--gr);cursor:pointer;font-size:14px;padding:4px;}
+
+/* Divider */
+.div{text-align:center;color:var(--gr);font-size:11px;padding:4px 0;}
+
+/* Audio test status */
+.test-status{font-size:12px;padding:4px 8px;border-radius:6px;display:inline-block;margin-top:3px;}
+.ok{background:rgba(0,232,122,.15);color:var(--gn);}
+.fail{background:rgba(239,68,68,.15);color:#ef4444;}
+.wait{background:rgba(255,107,0,.15);color:var(--or);}
+
+/* Toast */
+.toast{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);background:var(--gn);color:#000;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:200;white-space:nowrap;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hav">🏛️</div>
+    <div class="hinfo">
+      <h2>DigiTech Cyber</h2>
+      <p><span class="dot"></span>Ultra Smart AI V8 • हिंदी में बात करें</p>
+    </div>
+    <div class="htoolbar">
+      <button class="hbtn" onclick="openPanel('memPanel')" title="Memory">🧠</button>
+      <button class="hbtn" onclick="openPanel('settingsPanel')" title="Settings">⚙️</button>
+      <button class="hbtn" onclick="openPanel('audioPanel')" title="Audio Test">🔊</button>
+    </div>
+  </div>
+
+  <!-- MEMORY BAR -->
+  <div class="membar" id="membar">🧠 <span id="memgreeting"></span></div>
+
+  <!-- CHAT -->
+  <div class="chat" id="chat">
+    <div class="msg bot">
+      <div class="av">🤖</div>
+      <div class="bubble">🙏 <b>नमस्ते! मैं DigiTech Cyber का Ultra Smart AI हूँ!</b><br><br>
+      🎤 <b>माइक दबाएं और हिंदी में बोलें</b> — या नीचे लिखें<br><br>
+      सरकारी सेवाएं • वित्त • टिकट • योजनाएं — <b>सब का जवाब मिलेगा!</b></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bot-area">
+    <div class="sbar" id="sbar">🎤 माइक दबाएं या लिखें — कोई भी सवाल पूछ सकते हैं!</div>
+    <div class="ctrl">
+      <input class="tin" id="tin" placeholder="कोई भी सवाल लिखें..." onkeypress="if(event.key==='Enter')send()"/>
+      <button class="sbtn" onclick="send()">➤</button>
+      <button class="mbtn" id="mbtn" onclick="toggleMic()">🎤</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ── MEMORY PANEL ── -->
+  <div class="panel" id="memPanel">
+    <h3>🧠 आपकी याददाश्त <button class="panel-close" onclick="closePanel('memPanel')">✕</button></h3>
+    <label>आपका नाम (वैकल्पिक)</label>
+    <input id="memName" placeholder="जैसे: रामजी प्रसाद" />
+    <label>आप किस गाँव/शहर से हैं?</label>
+    <input id="memVillage" placeholder="जैसे: डुमरा, सीतामढ़ी" />
+    <label>आपकी सबसे ज़रूरी सेवा?</label>
+    <select id="memService">
+      <option value="">-- चुनें --</option>
+      <option value="आधार">आधार कार्ड</option>
+      <option value="PAN कार्ड">PAN कार्ड</option>
+      <option value="ट्रेन टिकट">ट्रेन टिकट</option>
+      <option value="PM किसान">PM किसान</option>
+      <option value="लोन">लोन</option>
+      <option value="GST/ITR">GST/ITR</option>
+      <option value="परीक्षा फॉर्म">परीक्षा फॉर्म</option>
+    </select>
+    <button class="pbtn" onclick="saveMemory()">💾 याद रखें</button>
+    <button class="pbtn secondary" onclick="clearMemory()" style="margin-top:8px;">🗑️ सब मिटाएं</button>
+    <div style="margin-top:16px;" id="memDisplay"></div>
+  </div>
+
+  <!-- ── SETTINGS PANEL ── -->
+  <div class="panel" id="settingsPanel">
+    <h3>⚙️ सेटिंग्स <button class="panel-close" onclick="closePanel('settingsPanel')">✕</button></h3>
+    <label>🔑 Sarvam AI Key (बेहतरीन हिंदी आवाज़)</label>
+    <input id="sarvamInput" type="password" placeholder="sarvam API key यहाँ डालें" />
+    <button class="pbtn" onclick="saveSarvam()">✅ Sarvam Key सेव करें</button>
+    <button class="pbtn secondary" style="margin-top:8px;" onclick="clearSarvam()">🗑️ Key हटाएं</button>
+    <div style="height:16px;"></div>
+    <label>🤖 Claude AI Key (बुद्धिमान जवाब)</label>
+    <input id="claudeInput" type="password" placeholder="Anthropic API key यहाँ डालें" />
+    <button class="pbtn" onclick="saveClaudeKey()">✅ Claude Key सेव करें</button>
+    <button class="pbtn secondary" style="margin-top:8px;" onclick="clearClaudeKey()">🗑️ Key हटाएं</button>
+    <div style="height:16px;"></div>
+    <div style="background:var(--acc);border-radius:12px;padding:12px;font-size:12px;color:var(--gr);line-height:1.7;">
+      💡 <b style="color:var(--wh);">Keys क्यों?</b><br>
+      • <b style="color:var(--or);">Sarvam:</b> dashboard.sarvam.ai पर मुफ्त sign up करें<br>
+      • <b style="color:var(--pu);">Claude:</b> console.anthropic.com पर sign up करें<br>
+      • Keys सिर्फ आपके फोन में save होती हैं — कहीं नहीं जातीं
+    </div>
+    <div style="height:10px;"></div>
+    <label>🔊 आवाज़ की गति</label>
+    <input type="range" id="rateSlider" min="0.6" max="1.2" step="0.05" value="0.82" style="padding:4px 0;" oninput="document.getElementById('rateVal').textContent=this.value">
+    <div style="font-size:12px;color:var(--or);">गति: <span id="rateVal">0.82</span></div>
+    <div style="height:10px;"></div>
+    <button class="pbtn secondary" onclick="testVoice()">🎤 आवाज़ टेस्ट करें</button>
+  </div>
+
+  <!-- ── AUDIO TEST PANEL ── -->
+  <div class="panel" id="audioPanel">
+    <h3>🔊 ऑडियो जाँच <button class="panel-close" onclick="closePanel('audioPanel')">✕</button></h3>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="mem-item"><span class="mlabel">🌐 Browser TTS</span><span id="st1" class="test-status wait">जाँच रही...</span></div>
+      <div class="mem-item"><span class="mlabel">🇮🇳 Hindi Voice</span><span id="st2" class="test-status wait">जाँच रही...</span></div>
+      <div class="mem-item"><span class="mlabel">📻 ResponsiveVoice</span><span id="st3" class="test-status wait">जाँच रही...</span></div>
+      <div class="mem-item"><span class="mlabel">🎙️ Sarvam AI</span><span id="st4" class="test-status wait">जाँच रही...</span></div>
+      <div class="mem-item"><span class="mlabel">🎤 Microphone</span><span id="st5" class="test-status wait">जाँच रही...</span></div>
+    </div>
+    <div style="height:14px;"></div>
+    <button class="pbtn" onclick="runAudioTests()">🔄 फिर से जाँचें</button>
+    <button class="pbtn secondary" style="margin-top:8px;" onclick="speak('नमस्ते! डिजिटेक साइबर में आपका स्वागत है। मैं आपकी सेवा के लिए हाज़िर हूँ।')">▶️ नमूना सुनें</button>
+  </div>
+
+</div>
+
+<script>
+// =============================================
+// DigiTech Cyber — Ultra Smart AI V8
+// =============================================
+
+const synth = window.speechSynthesis || null;
+let recog, isListen=false, isSpeak=false;
+let sarvamKey=null, claudeApiKey=null;
+let speechRate = 0.82;
+let hindiVoice = null;
+
+// ── MEMORY ──
+const MEM_KEY = 'digitech_v8_memory';
+function loadMemory(){ try{ return JSON.parse(localStorage.getItem(MEM_KEY)||'{}'); }catch(e){ return {}; } }
+function saveMemData(obj){ localStorage.setItem(MEM_KEY, JSON.stringify(obj)); }
+
+function saveMemory(){
+  const name = document.getElementById('memName').value.trim();
+  const village = document.getElementById('memVillage').value.trim();
+  const service = document.getElementById('memService').value;
+  const mem = loadMemory();
+  if(name) mem.name = name;
+  if(village) mem.village = village;
+  if(service) mem.service = service;
+  saveMemData(mem);
+  renderMemDisplay();
+  showToast('✅ याद कर लिया!');
+  closePanel('memPanel');
+  showMemBar();
+}
+
+function clearMemory(){
+  localStorage.removeItem(MEM_KEY);
+  document.getElementById('memName').value='';
+  document.getElementById('memVillage').value='';
+  document.getElementById('memService').value='';
+  renderMemDisplay();
+  document.getElementById('membar').classList.remove('show');
+  showToast('🗑️ याददाश्त मिटा दी');
+}
+
+function renderMemDisplay(){
+  const mem = loadMemory();
+  const el = document.getElementById('memDisplay');
+  if(!Object.keys(mem).length){ el.innerHTML=''; return; }
+  el.innerHTML = `<div style="font-size:12px;color:var(--gr);margin-bottom:8px;">💾 सहेजी गई जानकारी:</div>`
+    + (mem.name?`<div class="mem-item"><span class="mlabel">👤 नाम</span><span class="mval">${mem.name}</span></div>`:'')
+    + (mem.village?`<div class="mem-item"><span class="mlabel">📍 गाँव/शहर</span><span class="mval">${mem.village}</span></div>`:'')
+    + (mem.service?`<div class="mem-item"><span class="mlabel">⭐ मुख्य सेवा</span><span class="mval">${mem.service}</span></div>`:'');
+}
+
+function showMemBar(){
+  const mem = loadMemory();
+  if(!mem.name && !mem.village) return;
+  const bar = document.getElementById('membar');
+  const greet = document.getElementById('memgreeting');
+  let txt = '';
+  if(mem.name) txt += `नमस्ते ${mem.name}! `;
+  if(mem.village) txt += `(${mem.village}) `;
+  if(mem.service) txt += `| आपकी सेवा: ${mem.service}`;
+  greet.textContent = txt;
+  bar.classList.add('show');
+}
+
+// ── SETTINGS ──
+function saveSarvam(){
+  const k = document.getElementById('sarvamInput').value.trim();
+  if(!k){ showToast('⚠️ Key खाली है!'); return; }
+  localStorage.setItem('sarvam_api_key', k);
+  sarvamKey = k;
+  showToast('✅ Sarvam Key सेव!');
+  closePanel('settingsPanel');
+  setTimeout(()=> speakSarvam('नमस्ते! सर्वम आवाज़ तैयार है।'), 300);
+}
+function clearSarvam(){ localStorage.removeItem('sarvam_api_key'); sarvamKey=null; showToast('🗑️ Sarvam Key हटाई'); }
+
+function saveClaudeKey(){
+  const k = document.getElementById('claudeInput').value.trim();
+  if(!k){ showToast('⚠️ Key खाली है!'); return; }
+  localStorage.setItem('claude_api_key', k);
+  claudeApiKey = k;
+  showToast('✅ Claude Key सेव!');
+  closePanel('settingsPanel');
+}
+function clearClaudeKey(){ localStorage.removeItem('claude_api_key'); claudeApiKey=null; showToast('🗑️ Claude Key हटाई'); }
+
+function testVoice(){
+  speechRate = parseFloat(document.getElementById('rateSlider').value);
+  speak('नमस्ते! मैं डिजिटेक साइबर का Ultra Smart AI हूँ। आपकी सेवा में हाज़िर हूँ।');
+}
+
+// ── PANELS ──
+function openPanel(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='memPanel'){ renderMemDisplay(); const m=loadMemory(); if(m.name) document.getElementById('memName').value=m.name; if(m.village) document.getElementById('memVillage').value=m.village; if(m.service) document.getElementById('memService').value=m.service; }
+  if(id==='settingsPanel'){ const sk=localStorage.getItem('sarvam_api_key'); if(sk) document.getElementById('sarvamInput').value=sk; const ck=localStorage.getItem('claude_api_key'); if(ck) document.getElementById('claudeInput').value=ck; }
+  if(id==='audioPanel') runAudioTests();
+}
+function closePanel(id){ document.getElementById(id).classList.remove('open'); }
+
+// ── TOAST ──
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+// ── INIT ──
+window.addEventListener('load', ()=>{
+  sarvamKey = localStorage.getItem('sarvam_api_key');
+  claudeApiKey = localStorage.getItem('claude_api_key');
+  speechRate = parseFloat(localStorage.getItem('speech_rate')||'0.82');
+  showMemBar();
+  loadBestHindiVoice();
+  // Show service grid after welcome
+  setTimeout(()=> showServiceGrid(), 400);
+});
+
+function showServiceGrid(){
+  const area = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'svc-grid';
+  const services = [
+    {icon:'🪪',label:'आधार',rate:'पचास रुपए से'},
+    {icon:'🗂️',label:'PAN कार्ड',rate:'एक सौ पचास रुपए'},
+    {icon:'🚂',label:'ट्रेन टिकट',rate:'तीस रुपए से'},
+    {icon:'🌾',label:'PM किसान',rate:'eKYC तीस रुपए'},
+    {icon:'🏠',label:'PM आवास',rate:'दो सौ रुपए से'},
+    {icon:'💰',label:'लोन',rate:'कॉल करें'},
+    {icon:'📊',label:'GST/ITR',rate:'दो सौ रुपए से'},
+    {icon:'📢',label:'विज्ञापन',rate:'दो सौ रुपए से'},
+  ];
+  services.forEach(s=>{
+    const b=document.createElement('div');
+    b.className='svc-card';
+    b.innerHTML=`<span class="icon">${s.icon}</span><div class="label">${s.label}</div><div class="rate">${s.rate}</div>`;
+    b.onclick=()=>ask(s.label);
+    div.appendChild(b);
+  });
+  area.appendChild(div);
+  area.scrollTop=area.scrollHeight;
+}
+
+// =============================================
+// KNOWLEDGE BASE
+// =============================================
+function r(msg, quick=[]){ return {msg, quick, isAI:false}; }
+
+const KB = {
+  aadhaar:{keys:['aadhaar','adhar','aadhar','आधार','आधर'],fn:(t)=>{
+    if(t.includes('update')||t.includes('address')||t.includes('pata')||t.includes('badal')||t.includes('बदल'))
+      return r(`🪪 <b>आधार पता अपडेट</b><br><br>✅ कागज़ात: बिजली बिल, राशन कार्ड, बैंक पासबुक<br>✅ समय: 3 से 7 दिन में अपडेट<br>✅ <b>शुल्क: पचास रुपए</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक<br>📍 बछारपुर बाजार, डुमरा, सीतामढ़ी<br>📞 <b>8210073056</b>`,['📱 मोबाइल लिंक','🖨️ प्रिंट','🏠 मेनू']);
+    if(t.includes('mobile')||t.includes('number')||t.includes('link')||t.includes('मोबाइल'))
+      return r(`📱 <b>आधार मोबाइल लिंक</b><br><br>✅ OTP सेवाओं के लिए ज़रूरी है<br>✅ सिर्फ 10 मिनट का काम<br>✅ <b>शुल्क: एक सौ रुपए</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक<br>📞 <b>8210073056</b>`,['🪪 आधार अपडेट','🏠 मेनू']);
+    if(t.includes('print')||t.includes('download')||t.includes('प्रिंट'))
+      return r(`🖨️ <b>आधार प्रिंट</b><br><br>✅ सिर्फ बीस रुपए<br>✅ आधार नंबर लेकर आएं<br>📞 <b>8210073056</b>`,['🪪 आधार अपडेट','🏠 मेनू']);
+    return r(`🪪 <b>आधार — सभी सेवाएं</b><br><br>✅ पता अपडेट — <b>पचास रुपए</b><br>✅ मोबाइल लिंक — <b>एक सौ रुपए</b><br>✅ प्रिंट — <b>बीस रुपए</b><br>✅ नाम सुधार — <b>एक सौ रुपए</b><br><br>📍 बछारपुर बाजार, डुमरा, सीतामढ़ी<br>📞 <b>8210073056</b>`,['📍 पता अपडेट','📱 मोबाइल लिंक','🖨️ प्रिंट','🔗 PAN लिंक']);
+  }},
+  pan:{keys:['pan card','pan apply','पैन','पान card'],fn:(t)=>{
+    if(t.includes('link')||t.includes('aadhaar')) return r(`🔗 <b>PAN-आधार लिंक</b><br><br>⚠️ <b>ज़रूरी — लिंक नहीं तो PAN अमान्य!</b><br>✅ सिर्फ 5 मिनट<br>✅ <b>शुल्क: पचास रुपए</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक<br>📞 <b>8210073056</b>`,['🗂️ नया PAN','🏠 मेनू']);
+    if(t.includes('naya')||t.includes('apply')||t.includes('new')||t.includes('नया')||t.includes('बनवाना')) return r(`🗂️ <b>नया PAN कार्ड</b><br><br>✅ कागज़ात: आधार + फोटो + हस्ताक्षर<br>✅ 7 से 15 दिन में मिलेगा<br>✅ <b>शुल्क: एक सौ पचास रुपए</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक<br>📞 <b>8210073056</b>`,['🔗 PAN-आधार लिंक','🏠 मेनू']);
+    return r(`🗂️ <b>PAN कार्ड सेवाएं</b><br><br>✅ नया PAN — एक सौ पचास रुपए<br>✅ डुप्लीकेट — एक सौ पचास रुपए<br>✅ PAN-आधार लिंक — पचास रुपए<br>📞 <b>8210073056</b>`,['🆕 नया PAN','🔗 लिंक','🏠 मेनू']);
+  }},
+  train:{keys:['train','railway','irctc','tatkal','pnr','ट्रेन','रेलवे','rail ticket','ticket'],fn:(t)=>{
+    if(t.includes('tatkal')||t.includes('तत्काल')) return r(`⚡ <b>तत्काल बुकिंग</b><br><br>✅ AC: सुबह 10 बजे से<br>✅ Non-AC: सुबह 11 बजे से<br>✅ <b>शुल्क: पचास रुपए + तत्काल चार्ज</b><br>📞 <b>8210073056</b>`,['🚂 सामान्य','📋 PNR','🏠 मेनू']);
+    if(t.includes('pnr')||t.includes('status')) return r(`🔍 <b>PNR स्थिति</b><br><br>✅ 10 अंकों का PNR लेकर आएं<br>✅ <b>शुल्क: दस रुपए</b><br>📞 <b>8210073056</b>`,['🚂 टिकट बुक','🏠 मेनू']);
+    if(t.includes('cancel')||t.includes('refund')) return r(`❌ <b>टिकट रद्द</b><br><br>✅ ऑनलाइन रद्दीकरण<br>✅ 48 घंटे पहले — न्यूनतम कटौती<br>✅ 24-48 घंटे — 25% कटौती<br>📞 <b>8210073056</b>`,['🚂 नया टिकट','🏠 मेनू']);
+    return r(`🚂 <b>ट्रेन टिकट बुकिंग</b><br><br>✅ IRCTC — तीस से पचास रुपए प्रति टिकट<br>✅ तत्काल उपलब्ध<br>✅ स्लीपर, 3AC, 2AC, 1AC<br>⏰ 10 मिनट में बुकिंग!<br>📞 <b>8210073056</b>`,['⚡ तत्काल','📋 PNR','❌ रद्द','🏠 मेनू']);
+  }},
+  pmkisan:{keys:['pm kisan','pmkisan','kisan yojana','किसान','किस्त'],fn:(t)=>{
+    if(t.includes('kyc')||t.includes('ekyc')||t.includes('केवाईसी')) return r(`📱 <b>PM किसान e-KYC</b><br><br>⚠️ <b>बहुत ज़रूरी — बिना e-KYC किस्त बंद!</b><br>✅ <b>शुल्क: तीस रुपए</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक<br>📞 <b>8210073056</b>`,['🌾 PM किसान','🏠 मेनू']);
+    if(t.includes('status')||t.includes('check')) return r(`🔍 <b>PM किसान स्थिति</b><br><br>✅ किस्त आई या नहीं — बीस रुपए<br>📞 <b>8210073056</b>`,['📱 e-KYC','🏠 मेनू']);
+    return r(`🌾 <b>PM किसान सम्मान निधि</b><br><br>✅ नया पंजीकरण — एक सौ रुपए<br>✅ e-KYC (ज़रूरी!) — तीस रुपए<br>✅ स्थिति जांच — बीस रुपए<br><br>⚠️ <b>e-KYC नहीं तो छह हजार रुपए प्रति वर्ष की किस्त नहीं!</b><br>📞 <b>8210073056</b>`,['📱 e-KYC','📝 पंजीकरण','🔍 स्थिति','🏠 मेनू']);
+  }},
+  epf:{keys:['epf','pf','provident fund','ईपीएफ','भविष्य निधि','pf withdrawal','pf balance'],fn:(t)=>{
+    if(t.includes('withdraw')||t.includes('claim')) return r(`💼 <b>PF निकासी</b><br><br>✅ EPFO पोर्टल से ऑनलाइन क्लेम<br>✅ UAN + आधार + बैंक लिंक ज़रूरी<br>⏰ 15 से 20 दिन में पैसे<br>📞 <b>8210073056</b>`,['💼 PF बैलेंस','🏠 मेनू']);
+    if(t.includes('balance')||t.includes('kitna')) return r(`🔍 <b>EPF बैलेंस</b><br><br>1️⃣ SMS: EPFOHO UAN ENG → 7738299899<br>2️⃣ मिस्ड कॉल: 011-22901406<br>3️⃣ App: UMANG<br>📞 <b>8210073056</b>`,['💼 PF निकासी','🏠 मेनू']);
+    return r(`🏦 <b>EPF / भविष्य निधि</b><br><br>✅ वेतन का 24% जमा होता है<br>✅ ब्याज: 8.25% प्रति वर्ष<br>✅ बैलेंस जांच, निकासी, UAN सहायता<br>📞 <b>8210073056</b>`,['💼 PF निकासी','🔍 PF बैलेंस','🏠 मेनू']);
+  }},
+  pmawas:{keys:['pm awas','awas yojana','pmay','pradhan mantri awas','awas','housing','मकान'],fn:(t)=>{
+    if(t.includes('status')||t.includes('check')) return r(`🔍 <b>PM आवास स्थिति</b><br><br>✅ pmaymis.gov.in पर जांच<br>✅ <b>शुल्क: पचास रुपए</b><br>📞 <b>8210073056</b>`,['🏠 PM आवास','🏠 मेनू']);
+    return r(`🏠 <b>PM आवास योजना</b><br><br>🌟 <b>गरीब परिवार को पक्का घर!</b><br><br>✅ ग्रामीण: एक लाख बीस से तीस हजार रुपए<br>✅ शहरी: सब्सिडी मिलती है<br><br>📋 कागज़ात: आधार + बैंक पासबुक + राशन कार्ड + BPL कार्ड<br><br>💰 <b>शुल्क: दो सौ से पाँच सौ रुपए</b><br>📞 <b>8210073056</b>`,['🔍 स्थिति','📜 दाखिल खारिज','📞 संपर्क','🏠 मेनू']);
+  }},
+  bijli:{keys:['bijli','electricity','meter','light bill','बिजली','बिल'],fn:(t)=>{
+    if(t.includes('bill')||t.includes('pay')) return r(`⚡ <b>बिजली बिल भुगतान</b><br><br>✅ <b>शुल्क: बीस से पचास रुपए</b><br>📞 <b>8210073056</b>`,['⚡ नया मीटर','🏠 मेनू']);
+    return r(`⚡ <b>बिजली सेवाएं</b><br><br>✅ नया मीटर कनेक्शन — दो सौ से पाँच सौ रुपए<br>✅ बिल भुगतान — बीस से पचास रुपए<br>✅ नाम स्थानांतरण — दो सौ से तीन सौ रुपए<br>📞 <b>8210073056</b>`,['💰 बिल भुगतान','🏠 मेनू']);
+  }},
+  dakhilkharij:{keys:['dakhil kharij','dakhilkharij','जमीन','ज़मीन','land','zameen','mutation','जमाबंदी'],fn:()=>r(`📜 <b>दाखिल खारिज / भूमि</b><br><br>✅ दाखिल खारिज — दो सौ से पाँच सौ रुपए<br>✅ जमाबंदी — पचास से एक सौ रुपए<br>✅ खाता-खसरा — पचास से एक सौ रुपए<br><br>⏰ 30 से 60 दिन<br>📞 <b>8210073056</b>`,['🏠 PM आवास','📄 प्रमाण पत्र','🏠 मेनू'])},
+  certificate:{keys:['certificate','jati','caste','जाति','income','aay','आय','niwas','निवास','praman','प्रमाण'],fn:()=>r(`📄 <b>सरकारी प्रमाण पत्र</b><br><br>✅ जाति प्रमाण — एक सौ से दो सौ रुपए<br>✅ आय प्रमाण — एक सौ से दो सौ रुपए<br>✅ निवास प्रमाण — एक सौ से दो सौ रुपए<br><br>📋 कागज़ात: आधार + राशन कार्ड + फोटो<br>⏰ 3 से 7 दिन<br>📞 <b>8210073056</b>`,['🪪 आधार','🗳️ वोटर ID','🏠 मेनू'])},
+  voter:{keys:['voter id','voter card','vote','matdata','मतदाता','वोटर'],fn:()=>r(`🗳️ <b>मतदाता पहचान पत्र</b><br><br>✅ नया, सुधार, स्थानांतरण, प्रिंट<br>✅ <b>शुल्क: पचास से एक सौ रुपए</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक<br>📞 <b>8210073056</b>`,['🪪 आधार','📄 प्रमाण पत्र','🏠 मेनू'])},
+  dl:{keys:['driving licence','driving license','dl banwana','ड्राइविंग','लाइसेंस'],fn:(t)=>{
+    if(t.includes('renewal')||t.includes('renew')) return r(`🔄 <b>DL नवीनीकरण</b><br><br>✅ <b>शुल्क: तीन सौ से पाँच सौ रुपए</b><br>📞 <b>8210073056</b>`,['🚗 नया DL','🏠 मेनू']);
+    return r(`🚗 <b>ड्राइविंग लाइसेंस</b><br><br>✅ लर्निंग + स्थायी + नवीनीकरण<br>✅ <b>शुल्क: दो सौ से पाँच सौ रुपए</b><br>📞 <b>8210073056</b>`,['🆕 नया DL','🔄 नवीनीकरण','🏠 मेनू']);
+  }},
+  scholarship:{keys:['scholarship','छात्रवृत्ति','sc st obc','padhai','education help'],fn:()=>r(`🎓 <b>छात्रवृत्ति सेवाएं</b><br><br>✅ NSP (SC/ST/OBC) — scholarships.gov.in<br>✅ बिहार राज्य छात्रवृत्ति<br>✅ मुख्यमंत्री कन्या उत्थान — पच्चीस हजार रुपए<br><br>💰 <b>शुल्क: पचास से एक सौ रुपए</b><br>📞 <b>8210073056</b>`,['📄 आय प्रमाण','📄 जाति प्रमाण','🏠 मेनू'])},
+  insurance:{keys:['insurance','bima','बीमा','pmjjby','pmsby','jeevan bima'],fn:(t)=>{
+    if(t.includes('pmjjby')||t.includes('jeevan')||t.includes('life')) return r(`❤️ <b>PMJJBY — जीवन बीमा</b><br><br>✅ चार सौ छत्तीस रुपए प्रति वर्ष में दो लाख रुपए बीमा<br>✅ 18 से 50 वर्ष<br>💰 <b>शुल्क: पचास रुपए</b><br>📞 <b>8210073056</b>`,['🛡️ PMSBY','🏠 मेनू']);
+    if(t.includes('pmsby')||t.includes('accident')) return r(`🛡️ <b>PMSBY — दुर्घटना बीमा</b><br><br>✅ बीस रुपए प्रति वर्ष में दो लाख रुपए कवर<br>💰 <b>शुल्क: तीस रुपए</b><br>📞 <b>8210073056</b>`,['❤️ PMJJBY','🏠 मेनू']);
+    return r(`🛡️ <b>बीमा सेवाएं</b><br><br>✅ PMJJBY जीवन बीमा<br>✅ PMSBY दुर्घटना बीमा<br>✅ APY अटल पेंशन<br>✅ फसल बीमा<br>📞 <b>8210073056</b>`,['❤️ जीवन बीमा','🛡️ दुर्घटना बीमा','🏠 मेनू']);
+  }},
+  loan:{keys:['loan','लोन','emi','mudra loan','home loan','personal loan','business loan','bike loan'],fn:(t)=>{
+    if(t.includes('home')||t.includes('ghar')) return r(`🏠 <b>होम लोन</b><br><br>✅ घर खरीदने/बनाने के लिए<br>✅ 8.5-10% ब्याज दर<br>📋 कागज़ात: आधार + PAN + आय प्रमाण + संपत्ति<br>📞 <b>8210073056</b>`,['🏠 PM आवास','🏠 मेनू']);
+    if(t.includes('mudra')||t.includes('business')) return r(`💼 <b>MUDRA व्यापार लोन</b><br><br>✅ शिशु: पचास हजार रुपए तक<br>✅ किशोर: पचास हजार से पाँच लाख<br>✅ तरुण: पाँच से दस लाख<br>📞 <b>8210073056</b>`,['🏦 बैंक खाता','📊 GST','🏠 मेनू']);
+    return r(`💰 <b>लोन सेवाएं</b><br><br>✅ बाइक/कार लोन<br>✅ MUDRA व्यापार लोन<br>✅ व्यक्तिगत लोन<br>✅ होम लोन<br>✅ ज़मीन पर लोन (LAP)<br><br>💰 <b>जानकारी मुफ्त — कॉल करें!</b><br>📞 <b>8210073056</b>`,['🏍️ बाइक लोन','💼 व्यापार लोन','🏠 होम लोन','🏠 मेनू']);
+  }},
+  gst:{keys:['gst','जीएसटी','goods service tax','gst return','gst number','gst registration'],fn:()=>r(`📊 <b>GST सेवाएं</b><br><br>✅ नया GST पंजीकरण — पाँच सौ रुपए से<br>✅ मासिक/त्रैमासिक रिटर्न — तीन सौ रुपए से<br><br>⚠️ टर्नओवर > बीस लाख (सेवा) / चालीस लाख (माल) हो तो ज़रूरी<br>📞 <b>8210073056</b>`,['💼 व्यापार लोन','📝 ITR','🏠 मेनू'])},
+  itr:{keys:['itr','income tax','tax filing','tax return','आयकर','टैक्स','tax refund'],fn:(t)=>{
+    if(t.includes('refund')) return r(`💰 <b>आयकर रिफंड</b><br><br>✅ ITR फाइल करने पर रिफंड मिलेगा<br>✅ Form 16 ज़रूरी (नौकरी वालों के लिए)<br>✅ <b>शुल्क: दो सौ से पाँच सौ रुपए</b><br>📞 <b>8210073056</b>`,['📊 GST','🏠 मेनू']);
+    return r(`📝 <b>ITR — आयकर रिटर्न</b><br><br>✅ नौकरीपेशा + व्यापारी दोनों के लिए<br>✅ अंतिम तिथि: 31 जुलाई<br>✅ <b>शुल्क: दो सौ से पाँच सौ रुपए</b><br>📞 <b>8210073056</b>`,['📊 GST','💼 लोन','🏠 मेनू']);
+  }},
+  exam:{keys:['exam form','ssc','rrb','upsc','police exam','army exam','ibps','ctet','परीक्षा'],fn:()=>r(`📝 <b>परीक्षा फॉर्म</b><br><br>✅ Railway (RRB/NTPC)<br>✅ SSC (CGL/CHSL/MTS/GD)<br>✅ UPSC / राज्य PSC<br>✅ पुलिस, सेना, बैंक, शिक्षक<br><br>💰 <b>शुल्क: तीस से एक सौ रुपए</b><br>📞 <b>8210073056</b>`,['🪪 आधार','🗂️ PAN','🏠 मेनू'])},
+  flight:{keys:['flight','hawai','हवाई','फ्लाइट','air ticket','airplane'],fn:()=>r(`✈️ <b>हवाई टिकट</b><br><br>✅ IndiGo, Air India, SpiceJet<br>✅ घरेलू + अंतर्राष्ट्रीय<br>💰 <b>शुल्क: एक सौ से दो सौ रुपए</b><br>📞 <b>8210073056</b>`,['🚂 ट्रेन टिकट','🏠 मेनू'])},
+  wifi:{keys:['wifi','wi-fi','internet','broadband','वाईफाई','इंटरनेट'],fn:()=>r(`📶 <b>WiFi इंस्टॉलेशन</b><br><br>✅ घर/दुकान/ऑफिस<br>✅ BSNL / Airtel / Jio<br>💰 <b>दर: काम के हिसाब से — कॉल करें!</b><br>📞 <b>8210073056</b>`,['📢 विज्ञापन','📞 संपर्क','🏠 मेनू'])},
+  ad:{keys:['advertisement','video banao','audio ad','विज्ञापन','marketing','prachar'],fn:(t)=>{
+    if(t.includes('audio')||t.includes('radio')) return r(`🎙️ <b>ऑडियो विज्ञापन</b><br><br>✅ पेशेवर हिंदी ऑडियो<br>✅ WhatsApp/Social Media Ready<br>💰 <b>शुल्क: दो सौ से एक हजार रुपए</b><br>📞 <b>8210073056</b>`,['🎬 वीडियो विज्ञापन','📞 संपर्क','🏠 मेनू']);
+    if(t.includes('video')) return r(`🎬 <b>वीडियो विज्ञापन</b><br><br>✅ YouTube, Facebook, WhatsApp<br>✅ हिंदी/स्थानीय भाषा<br>💰 <b>शुल्क: पाँच सौ से दो हजार रुपए</b><br>📞 <b>8210073056</b>`,['🎙️ ऑडियो विज्ञापन','📞 संपर्क','🏠 मेनू']);
+    return r(`📢 <b>विज्ञापन सेवाएं</b><br><br>✅ 🎙️ ऑडियो — दो सौ से एक हजार रुपए<br>✅ 🎬 वीडियो — पाँच सौ से दो हजार रुपए<br>✅ 📱 WhatsApp/Social Media<br>📞 <b>8210073056</b>`,['🎙️ ऑडियो','🎬 वीडियो','📞 संपर्क','🏠 मेनू']);
+  }},
+  sukanya:{keys:['sukanya','sukanya samriddhi','सुकन्या','beti','daughter scheme'],fn:()=>r(`👧 <b>सुकन्या समृद्धि योजना</b><br><br>🌟 <b>बेटी के लिए सबसे अच्छी योजना!</b><br><br>✅ 10 साल से कम बेटी के लिए<br>✅ ब्याज: 8.2% (कर-मुक्त!)<br>✅ न्यूनतम: ढाई सौ रुपए/वर्ष<br>✅ धारा 80C में कर लाभ<br>📍 डाकघर या किसी भी बैंक में<br>📞 <b>8210073056</b>`,['🏦 PPF','💰 लोन','🏠 मेनू'])},
+  ppf:{keys:['ppf','public provident','पीपीएफ','post office saving'],fn:()=>r(`💰 <b>PPF — सार्वजनिक भविष्य निधि</b><br><br>✅ ब्याज: 7.1% (कर-मुक्त!)<br>✅ न्यूनतम: पाँच सौ रुपए/वर्ष<br>✅ परिपक्वता: 15 साल<br>📍 डाकघर या SBI/PNB<br>📞 <b>8210073056</b>`,['👧 सुकन्या','🏦 EPF','🏠 मेनू'])},
+  ration:{keys:['ration card','ration','राशन','bpl','apl card'],fn:()=>r(`🛒 <b>राशन कार्ड</b><br><br>✅ नया कार्ड: ब्लॉक ऑफिस या CSC<br>✅ सुधार: नाम, पता, परिवार<br>✅ आधार से लिंक ज़रूरी<br>📞 <b>8210073056</b>`,['📄 प्रमाण पत्र','🏠 PM आवास','🏠 मेनू'])},
+  ayushman:{keys:['ayushman','ayushman bharat','health card','pmjay','golden card','hospital free'],fn:()=>r(`🏥 <b>आयुष्मान भारत — PMJAY</b><br><br>🌟 <b>पाँच लाख रुपए तक मुफ्त इलाज!</b><br><br>✅ pmjay.gov.in पर पात्रता जांचें<br>✅ BPL परिवार के लिए<br>📋 कागज़ात: आधार + राशन कार्ड<br>📞 <b>8210073056</b>`,['🏠 PM आवास','📄 प्रमाण पत्र','🏠 मेनू'])},
+  nrega:{keys:['nrega','mnrega','job card','rozgar guarantee','मनरेगा','जॉब कार्ड'],fn:()=>r(`🔨 <b>मनरेगा — जॉब कार्ड</b><br><br>✅ 100 दिन का गारंटीकृत काम<br>✅ बिहार में दो सौ अट्ठाईस रुपए/दिन<br>📋 ग्राम पंचायत से बनवाएं<br>📞 <b>8210073056</b>`,['🌾 PM किसान','🏠 PM आवास','🏠 मेनू'])},
+  pension:{keys:['old age pension','widow pension','vidhwa','vridha','बुजुर्ग','विधवा pension','social pension'],fn:()=>r(`👴 <b>सामाजिक पेंशन</b><br><br>✅ वृद्धजन: चार-पाँच सौ रुपए/माह<br>✅ विधवा पेंशन: चार सौ रुपए/माह<br>✅ दिव्यांग पेंशन: चार सौ रुपए/माह<br>📍 प्रखंड विकास कार्यालय से<br>📞 <b>8210073056</b>`,['🏠 PM आवास','📄 प्रमाण पत्र','🏠 मेनू'])},
+  sharemarket:{keys:['share market','stock market','mutual fund','sip','demat','शेयर','निवेश','invest'],fn:(t)=>{
+    if(t.includes('mutual fund')||t.includes('sip')) return r(`📊 <b>म्यूचुअल फंड / SIP</b><br><br>✅ पाँच सौ रुपए/माह से शुरू<br>✅ 12-15% दीर्घकालिक रिटर्न<br>✅ Groww/Zerodha/HDFC Sky<br>📞 <b>8210073056</b>`,['📈 शेयर बाज़ार','🏠 मेनू']);
+    return r(`📈 <b>शेयर बाज़ार</b><br><br>✅ पहले डीमैट खाता खोलें<br>✅ एक सौ से दो सौ रुपए में खाता<br>✅ SIP से सुरक्षित शुरुआत करें<br>⚠️ जोखिम समझकर निवेश करें<br>📞 <b>8210073056</b>`,['📊 म्यूचुअल फंड','📂 डीमैट','🏠 मेनू']);
+  }},
+  contact:{keys:['contact','address','kahan hai','timing','kab khulte','phone','कहाँ','पता','फोन','location','संपर्क'],fn:()=>r(`📞 <b>DigiTech Cyber — हमारा पता</b><br><br>📍 <b>बछारपुर बाजार</b><br>आज़मगढ़ पंचायत, डुमरा<br>सीतामढ़ी, बिहार — 843323<br><br>📱 <b>8210073056</b><br>⏰ <b>सुबह नौ बजे से शाम छः बजे तक</b><br>सोमवार से शनिवार<br><br>🟢 WhatsApp पर भी उपलब्ध!`,['📋 सभी सेवाएं','🏠 मेनू'])},
+  all:{keys:['sab services','all service','sabhi','services list','rate list','kitna lagta','सभी सेवाएं','सब'],fn:()=>r(`📋 <b>DigiTech Cyber — सभी दरें</b><br><br>🪪 आधार: पचास रुपए से | प्रिंट: बीस रुपए<br>🗂️ PAN: एक सौ पचास रुपए | लिंक: पचास रुपए<br>🗳️ वोटर ID: पचास से एक सौ रुपए<br>🚗 DL: दो सौ से पाँच सौ रुपए<br>📄 प्रमाण पत्र: एक सौ से दो सौ रुपए<br>🚂 ट्रेन: तीस से पचास रुपए<br>✈️ फ्लाइट: एक सौ से दो सौ रुपए<br>🌾 PM किसान: पंजीकरण एक सौ | eKYC तीस<br>🏠 PM आवास: दो सौ से पाँच सौ रुपए<br>📜 दाखिल खारिज: दो सौ से पाँच सौ<br>📊 GST: पाँच सौ से | रिटर्न: तीन सौ से<br>📝 ITR: दो सौ से पाँच सौ रुपए<br>📝 परीक्षा फॉर्म: तीस से एक सौ रुपए<br>📈 डीमैट: एक सौ से दो सौ रुपए<br>🎬 विज्ञापन: दो सौ से दो हजार रुपए<br><br>📞 <b>8210073056</b><br>⏰ सुबह नौ से शाम छः, सोमवार-शनिवार`,['📞 संपर्क','🏠 मेनू'])},
+  thanks:{keys:['thanks','thank you','shukriya','dhanyawad','धन्यवाद','शुक्रिया','bahut achha','bahut badhiya'],fn:()=>r(`😊 <b>बहुत खुशी हुई मदद करके!</b><br><br>कोई भी काम हो — कभी भी पूछें!<br>📞 <b>8210073056</b><br>🙏 <b>DigiTech Cyber — आपकी सेवा में सदा हाज़िर!</b>`,['📋 सभी सेवाएं','📞 संपर्क','🏠 मेनू'])}
+};
+
+function getResp(text){
+  const t = text.toLowerCase();
+  for(const key in KB){
+    const item = KB[key];
+    if(item.keys.some(k=>t.includes(k))) return item.fn(t);
+  }
+  if(t.match(/^(hi|hello|hey|namaste|नमस्ते|हाय|helo|namaskar)[\s!?]*$/)||t.includes('menu')||t.includes('wapas')||t.includes('home')){
+    const mem = loadMemory();
+    const greet = mem.name ? `🙏 <b>नमस्ते ${mem.name} जी!</b>` : '🙏 <b>नमस्ते!</b>';
+    return r(`${greet} मैं DigiTech Cyber का Ultra Smart AI हूँ!<br><br>किसी भी सेवा के बारे में पूछें — दर, कागज़ात, प्रक्रिया सब बताऊंगा!<br><br>📞 <b>8210073056</b>`,['🪪 आधार','🚂 ट्रेन','🌾 PM किसान','💰 लोन','📊 GST/ITR','📞 संपर्क','📋 सभी']);
+  }
+  if(t.includes('ok')||t.includes('theek')||t.includes('achha')||t.includes('ठीक'))
+    return r(`😊 ठीक है! और कोई काम हो तो बताएं!<br>📞 <b>8210073056</b>`,['📋 सभी सेवाएं','📞 संपर्क']);
+  // Generic fallback — triggers Claude AI
+  return {msg:`🤖 "<b>${text}</b>" — इस बारे में सीधे बात करें:<br><br>📞 <b>8210073056</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक`, quick:['📋 सभी','📞 संपर्क'], isAI:false, needsAI:true};
+}
+
+// ── CLAUDE AI ──
+const AI_SYSTEM = `You are DigiTech Smart AI Assistant for DigiTech Cyber CSC at Bachharpur Bazar, Azamgarh Panchayat, Dumra, Sitamarhi, Bihar 843323. Phone: 8210073056. Timings: Monday-Saturday 9AM-6PM.
+
+Always reply in clear, warm, simple Hindi (Devanagari). Max 100 words. Be friendly like an experienced CSC operator. Give step-by-step answers. End with an offer to help further or suggest calling 8210073056.
+
+Services: Aadhaar (pachas rupaye), PAN (ek sau pachas rupaye), Voter ID, DL, Train/Flight tickets (tees rupaye se), PM Kisan eKYC (tees rupaye), PM Awas (do sau se), GST/ITR (do sau se), Exam forms, Demat account, WiFi, Audio/Video ads, all certificates.`;
+
+async function callClaudeAI(text){
+  const key = claudeApiKey || localStorage.getItem('claude_api_key');
+  if(!key) return null;
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:300,
+        system:AI_SYSTEM,
+        messages:[{role:'user',content:text}]
+      })
+    });
+    if(!res.ok) return null;
+    const data = await res.json();
+    return data.content?.[0]?.text || null;
+  }catch(e){ return null; }
+}
+
+// ── VOICE ──
+function loadBestHindiVoice(){
+  if(!synth) return;
+  const voices = synth.getVoices();
+  hindiVoice =
+    voices.find(v=>v.name==='Google हिन्दी') ||
+    voices.find(v=>v.lang==='hi-IN'&&v.name.includes('Microsoft')) ||
+    voices.find(v=>v.lang==='hi-IN') ||
+    voices.find(v=>v.lang.startsWith('hi')) || null;
+}
+
+function splitPhone(num){ return num.split('').join(' '); }
+
+function cleanText(text){
+  return text
+    .replace(/<[^>]*>/g,' ')
+    .replace(/[^\u0000-\u007E\u0900-\u097F\s]/g,'')
+    .replace(/Bachharpur Bazar/gi,'बछारपुर बाजार')
+    .replace(/Sitamarhi/gi,'सीतामढ़ी')
+    .replace(/Dumra/gi,'डुमरा')
+    .replace(/Bihar/gi,'बिहार')
+    .replace(/9\s*AM\s*[–\-]\s*6\s*PM/gi,'सुबह नौ बजे से शाम छः बजे तक')
+    .replace(/\b(\d{10})\b/g,m=>splitPhone(m))
+    .replace(/•/g,', ').replace(/:/g,', ').replace(/\//g,' या ')
+    .replace(/\|/g,', ').replace(/\s+/g,' ').trim().substring(0,500);
+}
+
+async function speakSarvam(text){
+  const key = sarvamKey || localStorage.getItem('sarvam_api_key');
+  if(!key){ speakFallback(text); return; }
+  try{
+    isSpeak=true; setSt('🔊 बोल रही हूँ...','speak');
+    setMbtn('🔊','speak');
+    const res = await fetch('https://api.sarvam.ai/text-to-speech',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','api-subscription-key':key},
+      body:JSON.stringify({
+        inputs:[text.substring(0,500)],
+        target_language_code:'hi-IN',
+        speaker:'anushka',pitch:0,pace:speechRate,loudness:1.5,
+        speech_sample_rate:22050,enable_preprocessing:true,model:'bulbul:v2',
+        description:'Speak in very natural, warm, polite Hindi. Tone: friendly, cheerful, helpful. Speak clearly so rural users understand. Like a real human, not a robot.'
+      })
+    });
+    if(!res.ok) throw new Error('API error');
+    const data = await res.json();
+    if(data.audios?.[0]){
+      const audio = new Audio('data:audio/wav;base64,'+data.audios[0]);
+      audio.onended=()=>{ isSpeak=false; resetUI(); };
+      audio.onerror=()=>{ isSpeak=false; resetUI(); speakFallback(text); };
+      audio.play();
+    } else throw new Error('No audio');
+  }catch(e){ isSpeak=false; resetUI(); speakFallback(text); }
+}
+
+function speak(text){
+  if(synth) synth.cancel();
+  if(typeof responsiveVoice!=='undefined') responsiveVoice.cancel();
+  const clean = cleanText(text);
+  if(!clean) return;
+  const hasKey = sarvamKey || localStorage.getItem('sarvam_api_key');
+  if(hasKey){ speakSarvam(clean); return; }
+  if(typeof responsiveVoice!=='undefined'&&responsiveVoice.voiceSupport()){
+    responsiveVoice.cancel();
+    responsiveVoice.speak(clean,'Hindi Female',{
+      rate:speechRate,pitch:1,volume:1,
+      onstart:()=>{isSpeak=true;setSt('🔊 बोल रही हूँ...','speak');setMbtn('🔊','speak');},
+      onend:()=>{isSpeak=false;resetUI();},
+      onerror:()=>{isSpeak=false;resetUI();speakFallback(clean);}
+    });
+  } else speakFallback(clean);
+}
+
+function speakFallback(clean){
+  if(!synth) return;
+  if(!hindiVoice) loadBestHindiVoice();
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang='hi-IN'; u.rate=speechRate; u.pitch=0.95; u.volume=1;
+  if(hindiVoice) u.voice=hindiVoice;
+  u.onstart=()=>{isSpeak=true;setSt('🔊 बोल रहा हूँ...','speak');setMbtn('🔊','speak');};
+  const t=setInterval(()=>{if(synth.speaking)synth.resume();},5000);
+  u.onend=()=>{clearInterval(t);isSpeak=false;resetUI();};
+  synth.speak(u);
+}
+
+function setMbtn(icon, cls){ const b=document.getElementById('mbtn'); b.textContent=icon; b.className='mbtn'+(cls?' '+cls:''); }
+function resetUI(){ setSt('🎤 माइक दबाएं या लिखें — कोई भी सवाल पूछ सकते हैं!'); setMbtn('🎤',''); }
+function setSt(t,c=''){ const s=document.getElementById('sbar'); s.textContent=t; s.className='sbar '+c; }
+
+// ── MIC ──
+function toggleMic(){
+  if(isSpeak){ if(typeof responsiveVoice!=='undefined') responsiveVoice.cancel(); if(synth) synth.cancel(); isSpeak=false; resetUI(); return; }
+  if(isListen){ stopL(); return; }
+  startL();
+}
+function startL(){
+  if(!('webkitSpeechRecognition'in window||'SpeechRecognition'in window)){alert('Voice के लिए Chrome browser use करें!');return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recog=new SR(); recog.lang='hi-IN'; recog.interimResults=true;
+  recog.onstart=()=>{isListen=true;setMbtn('🔴','listen');setSt('🎤 सुन रहा हूँ... बोलें!','listen');};
+  recog.onresult=(e)=>{let tr='';for(let i=e.resultIndex;i<e.results.length;i++) tr+=e.results[i][0].transcript; document.getElementById('tin').value=tr; if(e.results[e.results.length-1].isFinal){stopL();setTimeout(()=>send(),300);}};
+  recog.onerror=()=>stopL(); recog.onend=()=>{if(isListen)stopL();}; recog.start();
+}
+function stopL(){ isListen=false; if(recog) recog.stop(); resetUI(); }
+
+// ── CHAT ──
+function addMsg(text, isUser, isAI=false){
+  const area=document.getElementById('chat');
+  document.querySelectorAll('.qr-wrap,.svc-grid').forEach(e=>e.remove());
+  const div=document.createElement('div'); div.className=`msg ${isUser?'user':'bot'}`;
+  const fmt=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+  const aiBadge = (!isUser&&isAI) ? '<div class="ai-badge">✨ AI</div>' : '';
+  div.innerHTML=`${!isUser?'<div class="av">🤖</div>':''}<div class="bubble">${aiBadge}${fmt}</div>`;
+  area.appendChild(div); area.scrollTop=area.scrollHeight;
+}
+function addQR(opts){
+  const area=document.getElementById('chat');
+  const div=document.createElement('div'); div.className='qr-wrap';
+  opts.forEach(o=>{const b=document.createElement('button');b.className='qr';b.textContent=o;b.onclick=()=>ask(o);div.appendChild(b);});
+  area.appendChild(div); area.scrollTop=area.scrollHeight;
+}
+function showTyp(){ const area=document.getElementById('chat'); const d=document.createElement('div'); d.className='msg bot'; d.id='typ'; d.innerHTML='<div class="av">🤖</div><div class="typing"><span></span><span></span><span></span></div>'; area.appendChild(d); area.scrollTop=area.scrollHeight; }
+function remTyp(){ const t=document.getElementById('typ'); if(t) t.remove(); }
+
+function ask(q){ addMsg(q,true); process(q); }
+function send(){ const inp=document.getElementById('tin'); const u=inp.value.trim(); if(!u) return; inp.value=''; addMsg(u,true); process(u); }
+
+async function process(text){
+  showTyp(); setSt('🧠 सोच रही हूँ...','think');
+  const resp = getResp(text);
+  if(!resp.needsAI){
+    remTyp(); addMsg(resp.msg,false,false);
+    if(resp.quick?.length) addQR(resp.quick);
+    speak(resp.msg); setSt('🎤 माइक दबाएं या लिखें — कोई भी सवाल पूछ सकते हैं!');
+    return;
+  }
+  const aiReply = await callClaudeAI(text);
+  remTyp();
+  if(aiReply){ addMsg(aiReply,false,true); addQR(['📋 सभी सेवाएं','📞 संपर्क','🏠 मेनू']); speak(aiReply); }
+  else{ addMsg(resp.msg,false,false); if(resp.quick?.length) addQR(resp.quick); speak(resp.msg); }
+  setSt('🎤 माइक दबाएं या लिखें — कोई भी सवाल पूछ सकते हैं!');
+}
+
+if(synth) synth.onvoiceschanged=loadBestHindiVoice;
+
+// ── AUDIO TESTS ──
+function runAudioTests(){
+  // Browser TTS
+  const hasTTS = !!window.speechSynthesis;
+  setTst('st1', hasTTS?'✅ उपलब्ध':'❌ उपलब्ध नहीं', hasTTS?'ok':'fail');
+  // Hindi voice
+  setTimeout(()=>{
+    loadBestHindiVoice();
+    setTst('st2', hindiVoice?`✅ ${hindiVoice.name.substring(0,20)}`:'⚠️ Hindi voice नहीं मिली', hindiVoice?'ok':'fail');
+  },500);
+  // ResponsiveVoice
+  const hasRV = typeof responsiveVoice!=='undefined'&&responsiveVoice.voiceSupport();
+  setTst('st3', hasRV?'✅ उपलब्ध':'❌ उपलब्ध नहीं', hasRV?'ok':'fail');
+  // Sarvam
+  const hasSarvam = !!(sarvamKey||localStorage.getItem('sarvam_api_key'));
+  setTst('st4', hasSarvam?'✅ Key मिली':'⚠️ Key नहीं (Settings में डालें)', hasSarvam?'ok':'wait');
+  // Mic
+  navigator.mediaDevices?.getUserMedia({audio:true})
+    .then(()=>setTst('st5','✅ उपलब्ध','ok'))
+    .catch(()=>setTst('st5','❌ Permission नहीं','fail'));
+}
+function setTst(id,txt,cls){ const e=document.getElementById(id); e.textContent=txt; e.className='test-status '+cls; }
+</script>
+</body>
+</html>
