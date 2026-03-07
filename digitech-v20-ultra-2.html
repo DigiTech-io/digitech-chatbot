@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DigiTech Cyber — Ultra AI V20</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+<style>
+:root{
+  --g1:#0a0a0f;--g2:#0d0d1a;--g3:#111128;
+  --or:#ff5c00;--or2:#ff8040;--or3:#ffb380;
+  --gn:#00ff88;--bl:#4488ff;--pu:#aa66ff;--cy:#00ccff;
+  --wh:#eef2ff;--gr:#556;
+  --card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);
+  --bor:rgba(255,92,0,0.2);--bor2:rgba(255,255,255,0.08);
+  --shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--g1);overflow:hidden;}
+body{font-family:'Sora','Noto Sans Devanagari',sans-serif;display:flex;align-items:center;justify-content:center;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 10%, rgba(255,92,0,0.12) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 90%, rgba(68,136,255,0.07) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(170,102,255,0.04) 0%,transparent 70%);
+}
+
+/* ══ SHELL ══ */
+.shell{width:100%;max-width:430px;height:100vh;max-height:860px;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--g2);}
+@media(min-width:480px){.shell{border-radius:32px;height:96vh;box-shadow:var(--shadow),0 0 0 1px var(--bor2),inset 0 1px 0 rgba(255,255,255,0.06);}}
+
+/* ══ HEADER ══ */
+.hdr{
+  padding:0 16px;height:66px;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;
+  background:linear-gradient(180deg,rgba(255,92,0,0.18) 0%,rgba(255,92,0,0.04) 100%);
+  border-bottom:1px solid var(--bor);
+}
+.hdr::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,92,0,0.6),transparent);}
+.logo-ring{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--or),#c43000);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 4px 16px rgba(255,92,0,0.4);}
+.hname{flex:1;}
+.hname h2{color:var(--wh);font-size:14.5px;font-weight:800;letter-spacing:0.2px;line-height:1.2;}
+.hname p{color:rgba(255,255,255,0.5);font-size:10px;display:flex;align-items:center;gap:4px;margin-top:2px;}
+.online-dot{width:5px;height:5px;background:var(--gn);border-radius:50%;animation:glow 2s infinite;}
+@keyframes glow{0%,100%{box-shadow:0 0 4px var(--gn);}50%{box-shadow:0 0 10px var(--gn),0 0 20px rgba(0,255,136,0.3);}}
+.htools{display:flex;gap:5px;}
+.htool{width:30px;height:30px;background:var(--card2);border:1px solid var(--bor2);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:.2s;color:var(--wh);}
+.htool:active{background:rgba(255,92,0,0.3);border-color:var(--or);}
+.v-badge{background:linear-gradient(135deg,var(--or),var(--pu));border-radius:6px;padding:2px 7px;font-size:9px;font-weight:800;color:#fff;letter-spacing:0.5px;}
+
+/* ══ NAV TABS ══ */
+.tabs{display:flex;background:rgba(0,0,0,0.3);border-bottom:1px solid var(--bor2);flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:1;min-width:60px;padding:9px 4px 8px;text-align:center;cursor:pointer;font-size:10px;color:rgba(255,255,255,0.4);font-weight:600;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap;}
+.tab.active{color:var(--or);border-bottom-color:var(--or);}
+.tab .ti{display:block;font-size:16px;margin-bottom:2px;}
+
+/* ══ MEMORY BAR ══ */
+.mbar{padding:6px 14px;background:rgba(0,255,136,0.07);border-bottom:1px solid rgba(0,255,136,0.12);font-size:11px;color:var(--gn);display:none;align-items:center;gap:5px;flex-shrink:0;}
+.mbar.show{display:flex;}
+
+/* ══ CHAT AREA ══ */
+.chat{flex:1;overflow-y:auto;padding:12px 12px 4px;display:flex;flex-direction:column;gap:8px;}
+.chat::-webkit-scrollbar{width:2px;}
+.chat::-webkit-scrollbar-thumb{background:rgba(255,92,0,0.3);border-radius:4px;}
+
+/* Messages */
+.msg{display:flex;gap:8px;animation:rise .3s ease;}
+@keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{flex-direction:row-reverse;}
+.ava{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,var(--or),#c43000);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;align-self:flex-end;}
+.bub{max-width:84%;padding:9px 13px;border-radius:16px;font-size:13px;line-height:1.7;}
+.bot .bub{background:var(--card2);color:var(--wh);border-bottom-left-radius:3px;border:1px solid var(--bor2);}
+.user .bub{background:linear-gradient(135deg,var(--or),#c43000);color:#fff;border-bottom-right-radius:3px;}
+.ai-tag{display:inline-flex;align-items:center;gap:3px;background:linear-gradient(135deg,rgba(170,102,255,0.3),rgba(68,136,255,0.3));border:1px solid rgba(170,102,255,0.4);border-radius:6px;padding:1px 6px;font-size:9px;font-weight:700;color:#cc99ff;margin-bottom:5px;}
+
+/* Typing */
+.typing-bub{display:flex;gap:4px;padding:10px 14px;background:var(--card2);border-radius:16px;border-bottom-left-radius:3px;border:1px solid var(--bor2);width:fit-content;}
+.typing-bub span{width:5px;height:5px;background:var(--gr);border-radius:50%;animation:bob 1.1s infinite;}
+.typing-bub span:nth-child(2){animation-delay:.18s;}
+.typing-bub span:nth-child(3){animation-delay:.36s;}
+@keyframes bob{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-6px);}}
+
+/* Quick replies */
+.qr-row{display:flex;flex-wrap:wrap;gap:5px;padding:2px 0 2px 36px;animation:rise .35s ease;}
+.qr{background:transparent;border:1.5px solid rgba(255,92,0,0.5);color:var(--or2);padding:4px 10px;border-radius:14px;font-size:11.5px;font-family:'Sora',sans-serif;cursor:pointer;transition:.15s;font-weight:600;}
+.qr:active{background:var(--or);color:#fff;border-color:var(--or);}
+
+/* Service Categories */
+.cat-wrap{padding:4px 0 2px 0;animation:rise .35s ease;}
+.cat-title{font-size:10px;color:var(--gr);font-weight:700;padding:0 0 6px 2px;letter-spacing:0.8px;text-transform:uppercase;}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.cat-card{background:var(--card);border:1px solid var(--bor2);border-radius:12px;padding:9px 6px;cursor:pointer;transition:.2s;text-align:center;position:relative;overflow:hidden;}
+.cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,92,0,0.08),transparent);opacity:0;transition:.2s;}
+.cat-card:active::before{opacity:1;}
+.cat-card:active{border-color:rgba(255,92,0,0.5);}
+.cat-card .ci{font-size:18px;display:block;margin-bottom:3px;}
+.cat-card .cl{font-size:10px;color:var(--wh);font-weight:600;line-height:1.2;}
+.cat-card .cr{font-size:9px;color:var(--gn);margin-top:2px;font-weight:500;}
+
+/* Info cards */
+.info-card{background:var(--card);border:1px solid var(--bor2);border-radius:14px;padding:12px;margin:2px 0;animation:rise .3s ease;}
+.info-card .ic-head{font-size:12px;font-weight:700;color:var(--or2);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.info-card .ic-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bor2);font-size:12px;}
+.info-card .ic-row:last-child{border-bottom:none;}
+.ic-label{color:rgba(255,255,255,0.6);}
+.ic-val{color:var(--wh);font-weight:600;}
+.ic-rate{color:var(--gn);font-weight:700;}
+
+/* ══ BOTTOM INPUT ══ */
+.bot-bar{background:rgba(0,0,0,0.4);border-top:1px solid var(--bor2);padding:8px 10px 12px;flex-shrink:0;backdrop-filter:blur(20px);}
+.status-line{font-size:11px;color:var(--gr);text-align:center;min-height:15px;margin-bottom:7px;transition:.2s;}
+.status-line.listen{color:var(--or);font-weight:700;animation:flash 1s infinite;}
+.status-line.speak{color:var(--gn);font-weight:600;}
+.status-line.think{color:var(--pu);font-weight:600;}
+@keyframes flash{0%,100%{opacity:1;}50%{opacity:.4;}}
+.inp-row{display:flex;gap:7px;align-items:center;}
+.txt-in{flex:1;background:var(--card2);border:1.5px solid var(--bor2);border-radius:22px;padding:10px 15px;color:var(--wh);font-size:13.5px;font-family:'Sora',sans-serif;outline:none;transition:.2s;}
+.txt-in:focus{border-color:var(--or);background:rgba(255,92,0,0.06);}
+.txt-in::placeholder{color:rgba(255,255,255,0.25);}
+.send-btn{width:38px;height:38px;background:var(--card2);border:1.5px solid var(--bor2);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--or);flex-shrink:0;transition:.2s;}
+.send-btn:active{background:var(--or);color:#fff;}
+.mic-btn{width:48px;height:48px;background:linear-gradient(135deg,var(--or),#c43000);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 4px 18px rgba(255,92,0,0.5);transition:.2s;}
+.mic-btn:active{transform:scale(0.92);}
+.mic-btn.listen{background:linear-gradient(135deg,#ff3333,#aa0000);animation:pulse-red 1s infinite;}
+.mic-btn.speak{background:linear-gradient(135deg,var(--gn),#009944);}
+@keyframes pulse-red{0%,100%{box-shadow:0 4px 18px rgba(255,50,50,0.5);}50%{box-shadow:0 4px 30px rgba(255,50,50,0.9),0 0 0 8px rgba(255,50,50,0.1);}}
+
+/* ══ PANELS (Settings/Memory etc) ══ */
+.panel{position:absolute;inset:0;background:rgba(8,8,15,0.98);z-index:100;display:flex;flex-direction:column;padding:18px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .25s;border-radius:inherit;}
+.panel.open{opacity:1;pointer-events:all;}
+.panel-hdr{display:flex;align-items:center;margin-bottom:16px;}
+.panel-hdr h3{color:var(--or);font-size:16px;font-weight:800;flex:1;}
+.pcls{background:var(--card2);border:1px solid var(--bor2);border-radius:50%;width:28px;height:28px;color:rgba(255,255,255,0.5);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.p-section{margin-bottom:16px;}
+.p-label{font-size:11px;color:var(--gr);font-weight:700;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;}
+.p-input{width:100%;background:var(--card2);border:1.5px solid var(--bor2);border-radius:12px;padding:10px 13px;color:var(--wh);font-size:13px;font-family:inherit;outline:none;transition:.2s;margin-bottom:8px;}
+.p-input:focus{border-color:var(--or);}
+.p-select{width:100%;background:var(--card2);border:1.5px solid var(--bor2);border-radius:12px;padding:10px 13px;color:var(--wh);font-size:13px;font-family:inherit;outline:none;appearance:none;margin-bottom:8px;}
+.p-btn{width:100%;padding:11px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--or),#c43000);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:6px;}
+.p-btn.sec{background:var(--card2);border:1.5px solid var(--bor2);color:rgba(255,255,255,0.5);}
+.p-note{background:var(--card);border:1px solid var(--bor2);border-radius:10px;padding:10px 12px;font-size:11.5px;color:rgba(255,255,255,0.5);line-height:1.7;}
+.p-note b{color:var(--wh);}
+.mem-row{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bor2);border-radius:10px;padding:9px 11px;margin-bottom:7px;}
+.mem-row .ml{flex:1;font-size:12.5px;color:rgba(255,255,255,0.6);}
+.mem-row .mv{font-size:13px;color:var(--or2);font-weight:600;}
+
+/* Audio test */
+.aud-row{display:flex;align-items:center;background:var(--card);border:1px solid var(--bor2);border-radius:10px;padding:9px 12px;margin-bottom:7px;}
+.aud-lbl{flex:1;font-size:12.5px;color:rgba(255,255,255,0.7);}
+.aud-st{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600;}
+.aud-ok{background:rgba(0,255,136,0.15);color:var(--gn);}
+.aud-fail{background:rgba(255,60,60,0.15);color:#ff6060;}
+.aud-wait{background:rgba(255,92,0,0.15);color:var(--or2);}
+
+/* Toast */
+.toast{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);background:var(--gn);color:#000;padding:7px 18px;border-radius:20px;font-size:12.5px;font-weight:700;opacity:0;transition:opacity .25s;pointer-events:none;z-index:200;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+/* Scrollable service list */
+.svc-list{display:flex;flex-direction:column;gap:6px;}
+.svc-item{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bor2);border-radius:12px;padding:10px 12px;cursor:pointer;transition:.2s;}
+.svc-item:active{border-color:var(--or);background:rgba(255,92,0,0.08);}
+.svc-item .si-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0;}
+.svc-item .si-info{flex:1;}
+.svc-item .si-name{font-size:13px;color:var(--wh);font-weight:600;}
+.svc-item .si-desc{font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px;}
+.svc-item .si-rate{font-size:12px;color:var(--gn);font-weight:700;flex-shrink:0;}
+
+/* Divider */
+.divider{text-align:center;font-size:10px;color:var(--gr);padding:3px 0;letter-spacing:0.5px;}
+
+/* Rate pill */
+.rpill{display:inline-block;background:rgba(0,255,136,0.12);border:1px solid rgba(0,255,136,0.25);border-radius:8px;padding:2px 7px;font-size:10.5px;color:var(--gn);font-weight:600;}
+</style>
+</head>
+<body>
+<div class="shell" id="shell">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="logo-ring">🏛️</div>
+    <div class="hname">
+      <h2>DigiTech Cyber CSC</h2>
+      <p><span class="online-dot"></span>Ultra AI V20 • 24/7 सहायक</p>
+    </div>
+    <div class="htools">
+      <button class="htool" onclick="openP('memP')" title="Memory">🧠</button>
+      <button class="htool" onclick="openP('setP')" title="Settings">⚙️</button>
+      <button class="htool" onclick="openP('audP')" title="Audio">🔊</button>
+    </div>
+    <span class="v-badge">V20</span>
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="chat" onclick="switchTab('chat')"><span class="ti">💬</span>चैट</div>
+    <div class="tab" data-tab="govt" onclick="switchTab('govt')"><span class="ti">🏛️</span>सरकारी</div>
+    <div class="tab" data-tab="finance" onclick="switchTab('finance')"><span class="ti">💰</span>वित्त</div>
+    <div class="tab" data-tab="travel" onclick="switchTab('travel')"><span class="ti">✈️</span>यात्रा</div>
+    <div class="tab" data-tab="business" onclick="switchTab('business')"><span class="ti">📊</span>बिज़नेस</div>
+    <div class="tab" data-tab="rates" onclick="switchTab('rates')"><span class="ti">💲</span>दरें</div>
+  </div>
+
+  <!-- MEMORY BAR -->
+  <div class="mbar" id="mbar">🧠 <span id="mgreeting"></span></div>
+
+  <!-- MAIN AREA -->
+  <div id="mainArea" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;">
+
+    <!-- CHAT TAB -->
+    <div id="tab-chat" class="chat" style="flex:1;"></div>
+
+    <!-- GOVT TAB -->
+    <div id="tab-govt" style="display:none;padding:12px;overflow-y:auto;flex:1;">
+      <div class="cat-wrap">
+        <div class="cat-title">📋 पहचान और दस्तावेज़</div>
+        <div class="cat-grid">
+          <div class="cat-card" onclick="ask('आधार कार्ड')"><span class="ci">🪪</span><div class="cl">आधार कार्ड</div><div class="cr">₹50 से</div></div>
+          <div class="cat-card" onclick="ask('PAN कार्ड')"><span class="ci">🗂️</span><div class="cl">PAN कार्ड</div><div class="cr">₹150</div></div>
+          <div class="cat-card" onclick="ask('वोटर ID')"><span class="ci">🗳️</span><div class="cl">वोटर ID</div><div class="cr">₹50-100</div></div>
+          <div class="cat-card" onclick="ask('ड्राइविंग लाइसेंस')"><span class="ci">🚗</span><div class="cl">DL लाइसेंस</div><div class="cr">₹200-500</div></div>
+          <div class="cat-card" onclick="ask('पासपोर्ट')"><span class="ci">📗</span><div class="cl">पासपोर्ट</div><div class="cr">जानकारी</div></div>
+          <div class="cat-card" onclick="ask('जाति प्रमाण पत्र')"><span class="ci">📄</span><div class="cl">प्रमाण पत्र</div><div class="cr">₹100-200</div></div>
+        </div>
+      </div>
+      <div style="height:10px;"></div>
+      <div class="cat-wrap">
+        <div class="cat-title">🌾 किसान और ग्रामीण योजनाएं</div>
+        <div class="cat-grid">
+          <div class="cat-card" onclick="ask('PM किसान')"><span class="ci">🌾</span><div class="cl">PM किसान</div><div class="cr">eKYC ₹30</div></div>
+          <div class="cat-card" onclick="ask('PM आवास')"><span class="ci">🏠</span><div class="cl">PM आवास</div><div class="cr">₹200-500</div></div>
+          <div class="cat-card" onclick="ask('मनरेगा जॉब कार्ड')"><span class="ci">🔨</span><div class="cl">मनरेगा</div><div class="cr">मुफ्त</div></div>
+          <div class="cat-card" onclick="ask('राशन कार्ड')"><span class="ci">🛒</span><div class="cl">राशन कार्ड</div><div class="cr">जानकारी</div></div>
+          <div class="cat-card" onclick="ask('दाखिल खारिज')"><span class="ci">📜</span><div class="cl">दाखिल खारिज</div><div class="cr">₹200-500</div></div>
+          <div class="cat-card" onclick="ask('छात्रवृत्ति')"><span class="ci">🎓</span><div class="cl">छात्रवृत्ति</div><div class="cr">₹50-100</div></div>
+        </div>
+      </div>
+      <div style="height:10px;"></div>
+      <div class="cat-wrap">
+        <div class="cat-title">🏥 स्वास्थ्य और पेंशन</div>
+        <div class="cat-grid">
+          <div class="cat-card" onclick="ask('आयुष्मान भारत')"><span class="ci">🏥</span><div class="cl">आयुष्मान</div><div class="cr">मुफ्त</div></div>
+          <div class="cat-card" onclick="ask('सामाजिक पेंशन')"><span class="ci">👴</span><div class="cl">पेंशन</div><div class="cr">जानकारी</div></div>
+          <div class="cat-card" onclick="ask('बिजली कनेक्शन')"><span class="ci">⚡</span><div class="cl">बिजली</div><div class="cr">₹20-500</div></div>
+          <div class="cat-card" onclick="ask('परीक्षा फॉर्म')"><span class="ci">📝</span><div class="cl">परीक्षा फॉर्म</div><div class="cr">₹30-100</div></div>
+          <div class="cat-card" onclick="ask('EPF PF')"><span class="ci">🏦</span><div class="cl">EPF/PF</div><div class="cr">जानकारी</div></div>
+          <div class="cat-card" onclick="ask('बीमा योजना')"><span class="ci">🛡️</span><div class="cl">बीमा</div><div class="cr">₹20/वर्ष</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCE TAB -->
+    <div id="tab-finance" style="display:none;padding:12px;overflow-y:auto;flex:1;">
+      <div class="svc-list">
+        <div class="svc-item" onclick="ask('बैंक खाता खोलना')"><span class="si-icon">🏦</span><div class="si-info"><div class="si-name">बैंक खाता (Zero Balance)</div><div class="si-desc">Jan Dhan, SBI, PNB, BOI</div></div><span class="si-rate">मुफ्त</span></div>
+        <div class="svc-item" onclick="ask('लोन')"><span class="si-icon">💰</span><div class="si-info"><div class="si-name">लोन सेवाएं</div><div class="si-desc">बाइक, घर, व्यापार, पर्सनल</div></div><span class="si-rate">कॉल करें</span></div>
+        <div class="svc-item" onclick="ask('MUDRA लोन')"><span class="si-icon">💼</span><div class="si-info"><div class="si-name">MUDRA व्यापार लोन</div><div class="si-desc">₹50,000 से ₹10 लाख तक</div></div><span class="si-rate">जानकारी</span></div>
+        <div class="svc-item" onclick="ask('ITR आयकर रिटर्न')"><span class="si-icon">📝</span><div class="si-info"><div class="si-name">ITR फाइलिंग</div><div class="si-desc">31 जुलाई अंतिम तिथि</div></div><span class="si-rate">₹200-500</span></div>
+        <div class="svc-item" onclick="ask('GST')"><span class="si-icon">📊</span><div class="si-info"><div class="si-name">GST पंजीकरण/रिटर्न</div><div class="si-desc">नया नंबर + मासिक रिटर्न</div></div><span class="si-rate">₹300 से</span></div>
+        <div class="svc-item" onclick="ask('डीमैट खाता')"><span class="si-icon">📈</span><div class="si-info"><div class="si-name">डीमैट खाता</div><div class="si-desc">Zerodha, Upstox, Groww</div></div><span class="si-rate">₹100-200</span></div>
+        <div class="svc-item" onclick="ask('म्यूचुअल फंड SIP')"><span class="si-icon">💹</span><div class="si-info"><div class="si-name">म्यूचुअल फंड / SIP</div><div class="si-desc">₹500/माह से शुरू</div></div><span class="si-rate">जानकारी</span></div>
+        <div class="svc-item" onclick="ask('सुकन्या समृद्धि')"><span class="ci" style="font-size:20px;width:32px;text-align:center;">👧</span><div class="si-info"><div class="si-name">सुकन्या समृद्धि</div><div class="si-desc">8.2% ब्याज, कर-मुक्त</div></div><span class="si-rate">₹250/वर्ष</span></div>
+        <div class="svc-item" onclick="ask('PPF')"><span class="si-icon">🪙</span><div class="si-info"><div class="si-name">PPF खाता</div><div class="si-desc">7.1% ब्याज, 15 साल</div></div><span class="si-rate">₹500/वर्ष</span></div>
+        <div class="svc-item" onclick="ask('FD fixed deposit')"><span class="si-icon">🏛️</span><div class="si-info"><div class="si-name">FD / सावधि जमा</div><div class="si-desc">SBI 6.5-7.5%, डाकघर 7.5%</div></div><span class="si-rate">जानकारी</span></div>
+        <div class="svc-item" onclick="ask('बीमा PMJJBY PMSBY')"><span class="si-icon">🛡️</span><div class="si-info"><div class="si-name">PMJJBY जीवन बीमा</div><div class="si-desc">₹436/वर्ष में ₹2 लाख</div></div><span class="si-rate">₹50 शुल्क</span></div>
+        <div class="svc-item" onclick="ask('APY अटल पेंशन')"><span class="si-icon">🧓</span><div class="si-info"><div class="si-name">APY — अटल पेंशन</div><div class="si-desc">60 साल बाद ₹1000-5000/माह</div></div><span class="si-rate">जानकारी</span></div>
+      </div>
+    </div>
+
+    <!-- TRAVEL TAB -->
+    <div id="tab-travel" style="display:none;padding:12px;overflow-y:auto;flex:1;">
+      <div class="svc-list">
+        <div class="svc-item" onclick="ask('ट्रेन टिकट बुकिंग')"><span class="si-icon">🚂</span><div class="si-info"><div class="si-name">ट्रेन टिकट IRCTC</div><div class="si-desc">Sleeper, 3AC, 2AC, 1AC, General</div></div><span class="si-rate">₹30-50</span></div>
+        <div class="svc-item" onclick="ask('तत्काल ट्रेन')"><span class="si-icon">⚡</span><div class="si-info"><div class="si-name">तत्काल बुकिंग</div><div class="si-desc">AC: 10am | Non-AC: 11am</div></div><span class="si-rate">₹50+</span></div>
+        <div class="svc-item" onclick="ask('PNR स्थिति')"><span class="si-icon">🔍</span><div class="si-info"><div class="si-name">PNR स्थिति जांच</div><div class="si-desc">Waiting/RAC/Confirmed</div></div><span class="si-rate">₹10</span></div>
+        <div class="svc-item" onclick="ask('ट्रेन रद्द')"><span class="si-icon">❌</span><div class="si-info"><div class="si-name">ट्रेन रद्दीकरण</div><div class="si-desc">ऑनलाइन कैंसिल + रिफंड</div></div><span class="si-rate">जानकारी</span></div>
+        <div class="svc-item" onclick="ask('हवाई टिकट')"><span class="si-icon">✈️</span><div class="si-info"><div class="si-name">फ्लाइट टिकट</div><div class="si-desc">IndiGo, Air India, SpiceJet</div></div><span class="si-rate">₹100-200</span></div>
+        <div class="svc-item" onclick="ask('बस टिकट')"><span class="si-icon">🚌</span><div class="si-info"><div class="si-name">बस टिकट बुकिंग</div><div class="si-desc">RedBus, BSRTC, राज्य बस</div></div><span class="si-rate">₹20-30</span></div>
+        <div class="svc-item" onclick="ask('होटल बुकिंग')"><span class="si-icon">🏨</span><div class="si-info"><div class="si-name">होटल बुकिंग</div><div class="si-desc">OYO, MakeMyTrip</div></div><span class="si-rate">₹50-100</span></div>
+        <div class="svc-item" onclick="ask('पासपोर्ट')"><span class="si-icon">📗</span><div class="si-info"><div class="si-name">पासपोर्ट सहायता</div><div class="si-desc">आवेदन + appointment</div></div><span class="si-rate">जानकारी</span></div>
+      </div>
+    </div>
+
+    <!-- BUSINESS TAB -->
+    <div id="tab-business" style="display:none;padding:12px;overflow-y:auto;flex:1;">
+      <div class="svc-list">
+        <div class="svc-item" onclick="ask('वीडियो विज्ञापन')"><span class="si-icon">🎬</span><div class="si-info"><div class="si-name">वीडियो विज्ञापन</div><div class="si-desc">YouTube, Facebook, WhatsApp</div></div><span class="si-rate">₹500-2000</span></div>
+        <div class="svc-item" onclick="ask('ऑडियो विज्ञापन')"><span class="si-icon">🎙️</span><div class="si-info"><div class="si-name">ऑडियो विज्ञापन</div><div class="si-desc">WhatsApp, Radio Style</div></div><span class="si-rate">₹200-1000</span></div>
+        <div class="svc-item" onclick="ask('WiFi इंस्टॉलेशन')"><span class="si-icon">📶</span><div class="si-info"><div class="si-name">WiFi इंस्टॉलेशन</div><div class="si-desc">BSNL, Airtel, Jio Fiber</div></div><span class="si-rate">कॉल करें</span></div>
+        <div class="svc-item" onclick="ask('GST')"><span class="si-icon">📊</span><div class="si-info"><div class="si-name">GST Registration</div><div class="si-desc">नया नंबर + Monthly Return</div></div><span class="si-rate">₹500+</span></div>
+        <div class="svc-item" onclick="ask('MUDRA लोन')"><span class="si-icon">💼</span><div class="si-info"><div class="si-name">MUDRA Business Loan</div><div class="si-desc">Shishu / Kishor / Tarun</div></div><span class="si-rate">जानकारी</span></div>
+        <div class="svc-item" onclick="ask('Udyam MSME पंजीकरण')"><span class="si-icon">🏭</span><div class="si-info"><div class="si-name">Udyam / MSME Registration</div><div class="si-desc">सरकारी लाभ के लिए ज़रूरी</div></div><span class="si-rate">₹200-300</span></div>
+        <div class="svc-item" onclick="ask('DTH रिचार्ज')"><span class="si-icon">📡</span><div class="si-info"><div class="si-name">DTH / मोबाइल रिचार्ज</div><div class="si-desc">Tata Sky, Dish, Airtel</div></div><span class="si-rate">₹10-20</span></div>
+        <div class="svc-item" onclick="ask('सोशल मीडिया मार्केटिंग')"><span class="si-icon">📱</span><div class="si-info"><div class="si-name">Social Media Marketing</div><div class="si-desc">Facebook, Instagram Page</div></div><span class="si-rate">₹300-1000</span></div>
+        <div class="svc-item" onclick="ask('बैनर पोस्टर डिज़ाइन')"><span class="si-icon">🎨</span><div class="si-info"><div class="si-name">Banner / Poster Design</div><div class="si-desc">दुकान/शादी/आयोजन</div></div><span class="si-rate">₹100-500</span></div>
+        <div class="svc-item" onclick="ask('ITR आयकर रिटर्न')"><span class="si-icon">📝</span><div class="si-info"><div class="si-name">ITR Filing</div><div class="si-desc">व्यापारी + नौकरीपेशा</div></div><span class="si-rate">₹200-500</span></div>
+      </div>
+    </div>
+
+    <!-- RATES TAB -->
+    <div id="tab-rates" style="display:none;padding:12px;overflow-y:auto;flex:1;">
+      <div class="info-card">
+        <div class="ic-head">🪪 आधार कार्ड सेवाएं</div>
+        <div class="ic-row"><span class="ic-label">पता अपडेट</span><span class="ic-rate">पचास रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">मोबाइल लिंक</span><span class="ic-rate">एक सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">प्रिंट/डाउनलोड</span><span class="ic-rate">बीस रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">नाम/जन्मतिथि सुधार</span><span class="ic-rate">एक सौ रुपए</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">🗂️ PAN कार्ड</div>
+        <div class="ic-row"><span class="ic-label">नया PAN</span><span class="ic-rate">एक सौ पचास रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">PAN-आधार लिंक</span><span class="ic-rate">पचास रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">डुप्लीकेट/सुधार</span><span class="ic-rate">एक सौ पचास रुपए</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">🚂 यात्रा सेवाएं</div>
+        <div class="ic-row"><span class="ic-label">ट्रेन टिकट</span><span class="ic-rate">तीस से पचास रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">तत्काल टिकट</span><span class="ic-rate">पचास रुपए + चार्ज</span></div>
+        <div class="ic-row"><span class="ic-label">PNR स्थिति</span><span class="ic-rate">दस रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">हवाई टिकट</span><span class="ic-rate">एक सौ से दो सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">बस टिकट</span><span class="ic-rate">बीस से तीस रुपए</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">🌾 सरकारी योजनाएं</div>
+        <div class="ic-row"><span class="ic-label">PM किसान पंजीकरण</span><span class="ic-rate">एक सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">PM किसान eKYC</span><span class="ic-rate">तीस रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">PM आवास आवेदन</span><span class="ic-rate">दो सौ से पाँच सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">दाखिल खारिज</span><span class="ic-rate">दो सौ से पाँच सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">छात्रवृत्ति फॉर्म</span><span class="ic-rate">पचास से एक सौ रुपए</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">📊 व्यापार और कर सेवाएं</div>
+        <div class="ic-row"><span class="ic-label">GST पंजीकरण</span><span class="ic-rate">पाँच सौ रुपए से</span></div>
+        <div class="ic-row"><span class="ic-label">GST रिटर्न (मासिक)</span><span class="ic-rate">तीन सौ रुपए से</span></div>
+        <div class="ic-row"><span class="ic-label">ITR फाइलिंग</span><span class="ic-rate">दो सौ से पाँच सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">Udyam/MSME</span><span class="ic-rate">दो सौ से तीन सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">परीक्षा फॉर्म</span><span class="ic-rate">तीस से एक सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">डीमैट खाता</span><span class="ic-rate">एक सौ से दो सौ रुपए</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">📢 विज्ञापन और डिजिटल</div>
+        <div class="ic-row"><span class="ic-label">ऑडियो विज्ञापन</span><span class="ic-rate">दो सौ से एक हजार रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">वीडियो विज्ञापन</span><span class="ic-rate">पाँच सौ से दो हजार रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">Banner/Poster Design</span><span class="ic-rate">एक सौ से पाँच सौ रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">Social Media Page</span><span class="ic-rate">तीन सौ से एक हजार रुपए</span></div>
+        <div class="ic-row"><span class="ic-label">WiFi इंस्टॉलेशन</span><span class="ic-rate">कॉल करें</span></div>
+        <div class="ic-row"><span class="ic-label">DTH/मोबाइल रिचार्ज</span><span class="ic-rate">दस से बीस रुपए</span></div>
+      </div>
+      <div style="background:rgba(0,255,136,0.07);border:1px solid rgba(0,255,136,0.2);border-radius:12px;padding:12px;margin-top:6px;text-align:center;">
+        <div style="font-size:14px;color:var(--gn);font-weight:700;">📞 8210073056</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;">सुबह नौ बजे से शाम छः बजे तक • सोमवार से शनिवार</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);">📍 बछारपुर बाजार, डुमरा, सीतामढ़ी, बिहार</div>
+      </div>
+    </div>
+
+  </div><!-- /mainArea -->
+
+  <!-- BOTTOM BAR -->
+  <div class="bot-bar">
+    <div class="status-line" id="stline">🎤 माइक दबाएं या नीचे लिखें</div>
+    <div class="inp-row">
+      <input class="txt-in" id="txtin" placeholder="कोई भी सवाल पूछें..." onkeypress="if(event.key==='Enter')send()"/>
+      <button class="send-btn" onclick="send()">➤</button>
+      <button class="mic-btn" id="micbtn" onclick="toggleMic()">🎤</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toastEl"></div>
+
+  <!-- ══ MEMORY PANEL ══ -->
+  <div class="panel" id="memP">
+    <div class="panel-hdr"><h3>🧠 याददाश्त</h3><button class="pcls" onclick="closeP('memP')">✕</button></div>
+    <div class="p-section">
+      <div class="p-label">आपका नाम</div>
+      <input class="p-input" id="mname" placeholder="जैसे: रामजी प्रसाद"/>
+      <div class="p-label">गाँव / शहर</div>
+      <input class="p-input" id="mvillage" placeholder="जैसे: डुमरा, सीतामढ़ी"/>
+      <div class="p-label">मुख्य सेवा</div>
+      <select class="p-select" id="mservice">
+        <option value="">-- चुनें --</option>
+        <option>आधार कार्ड</option><option>PAN कार्ड</option>
+        <option>ट्रेन टिकट</option><option>PM किसान</option>
+        <option>लोन</option><option>GST/ITR</option>
+        <option>परीक्षा फॉर्म</option><option>विज्ञापन</option>
+      </select>
+      <button class="p-btn" onclick="saveMem()">💾 याद कर लो</button>
+      <button class="p-btn sec" onclick="clearMem()">🗑️ सब मिटाओ</button>
+    </div>
+    <div id="memShow"></div>
+  </div>
+
+  <!-- ══ SETTINGS PANEL ══ -->
+  <div class="panel" id="setP">
+    <div class="panel-hdr"><h3>⚙️ सेटिंग्स</h3><button class="pcls" onclick="closeP('setP')">✕</button></div>
+    <div class="p-section">
+      <div class="p-label">🎙️ Sarvam AI Key (बेहतरीन हिंदी आवाज़)</div>
+      <input class="p-input" id="srvKey" type="password" placeholder="Sarvam API key"/>
+      <button class="p-btn" onclick="saveSrvKey()">✅ Sarvam Key Save करें</button>
+      <button class="p-btn sec" onclick="clrSrvKey()">🗑️ Key हटाएं</button>
+    </div>
+    <div class="p-section">
+      <div class="p-label">🟡 Gemini AI Key — <span style="color:var(--gn);font-size:10px;">FREE ★ Best Choice</span></div>
+      <input class="p-input" id="gmKey" type="password" placeholder="AIza... (aistudio.google.com)"/>
+      <button class="p-btn" onclick="saveGmKey()">✅ Gemini Key Save करें</button>
+      <button class="p-btn sec" onclick="clrGmKey()">🗑️ Key हटाएं</button>
+    </div>
+    <div class="p-section">
+      <div class="p-label">⚡ Groq AI Key — <span style="color:var(--gn);font-size:10px;">FREE ★ Super Fast</span></div>
+      <input class="p-input" id="grKey" type="password" placeholder="gsk_... (console.groq.com)"/>
+      <button class="p-btn" onclick="saveGrKey()">✅ Groq Key Save करें</button>
+      <button class="p-btn sec" onclick="clrGrKey()">🗑️ Key हटाएं</button>
+    </div>
+    <div class="p-section">
+      <div class="p-label">🔵 Claude AI Key — <span style="color:var(--or2);font-size:10px;">Paid (Optional)</span></div>
+      <input class="p-input" id="clKey" type="password" placeholder="sk-ant-... (console.anthropic.com)"/>
+      <button class="p-btn" onclick="saveClKey()">✅ Claude Key Save करें</button>
+      <button class="p-btn sec" onclick="clrClKey()">🗑️ Key हटाएं</button>
+    </div>
+    <div class="p-section">
+      <div class="p-label">🔊 आवाज़ की गति: <span id="rateShow">0.82</span></div>
+      <input type="range" id="rateSlider" min="0.6" max="1.1" step="0.05" value="0.82"
+        style="width:100%;accent-color:var(--or);margin:6px 0;"
+        oninput="document.getElementById('rateShow').textContent=this.value;speechRate=parseFloat(this.value);">
+      <button class="p-btn sec" onclick="testVoice()">▶️ आवाज़ टेस्ट करें</button>
+    </div>
+    <div class="p-note">
+      💡 <b>Free Keys कैसे पाएं?</b><br>
+      • <b style="color:#facc15;">Gemini:</b> aistudio.google.com → Get API Key (मुफ्त!)<br>
+      • <b style="color:#a3e635;">Groq:</b> console.groq.com → API Keys (मुफ्त!)<br>
+      • <b style="color:var(--or);">Sarvam:</b> dashboard.sarvam.ai → Free signup<br>
+      • <b style="color:var(--pu);">Claude:</b> console.anthropic.com → Paid<br>
+      • सभी Keys सिर्फ आपके फोन में — सुरक्षित!
+    </div>
+  </div>
+
+  <!-- ══ AUDIO TEST PANEL ══ -->
+  <div class="panel" id="audP">
+    <div class="panel-hdr"><h3>🔊 Audio जाँच</h3><button class="pcls" onclick="closeP('audP')">✕</button></div>
+    <div class="aud-row"><span class="aud-lbl">🌐 Browser TTS</span><span class="aud-st aud-wait" id="at1">जाँच...</span></div>
+    <div class="aud-row"><span class="aud-lbl">🇮🇳 Hindi Voice</span><span class="aud-st aud-wait" id="at2">जाँच...</span></div>
+    <div class="aud-row"><span class="aud-lbl">📻 ResponsiveVoice</span><span class="aud-st aud-wait" id="at3">जाँच...</span></div>
+    <div class="aud-row"><span class="aud-lbl">🎙️ Sarvam AI</span><span class="aud-st aud-wait" id="at4">जाँच...</span></div>
+    <div class="aud-row"><span class="aud-lbl">🟡 Gemini AI</span><span class="aud-st aud-wait" id="at6">जाँच...</span></div>
+    <div class="aud-row"><span class="aud-lbl">⚡ Groq AI</span><span class="aud-st aud-wait" id="at7">जाँच...</span></div>
+    <div class="aud-row"><span class="aud-lbl">🎤 Microphone</span><span class="aud-st aud-wait" id="at5">जाँच...</span></div>
+    <div style="height:12px;"></div>
+    <button class="p-btn" onclick="runAudTests()">🔄 फिर से जाँचें</button>
+    <button class="p-btn sec" style="margin-top:6px;" onclick="speak('नमस्ते! डिजिटेक साइबर में आपका स्वागत है। मैं आपकी सेवा में हाज़िर हूँ।')">▶️ नमूना सुनें</button>
+  </div>
+
+</div><!-- /shell -->
+
+<script>
+// ═══════════════════════════════════════
+//  DigiTech Cyber — Ultra AI V20
+// ═══════════════════════════════════════
+const synth = window.speechSynthesis||null;
+let recog,isListen=false,isSpeak=false;
+let sarvamKey=null,claudeKey=null,geminiKey=null,groqKey=null,speechRate=0.82;
+let hindiVoice=null,curTab='chat';
+
+// ── INIT ──
+window.addEventListener('load',()=>{
+  sarvamKey  = localStorage.getItem('sarvam_api_key');
+  claudeKey  = localStorage.getItem('claude_api_key');
+  geminiKey  = localStorage.getItem('gemini_api_key');
+  groqKey    = localStorage.getItem('groq_api_key');
+  speechRate = parseFloat(localStorage.getItem('speech_rate')||'0.82');
+  if(synth) synth.onvoiceschanged = loadHindiVoice;
+  loadHindiVoice();
+  showMemBar();
+  setTimeout(()=>greet(), 200);
+});
+
+function greet(){
+  const mem = getMem();
+  const name = mem.name ? `${mem.name} जी` : 'दोस्त';
+  const hasKey = claudeKey||localStorage.getItem('claude_api_key');
+  addBotMsg(
+    `🙏 <b>नमस्ते ${name}!</b> मैं DigiTech Cyber का Ultra Smart AI हूँ।<br><br>` +
+    `📋 ऊपर Tabs में सभी सेवाएं देखें<br>🎤 माइक दबाकर हिंदी में बोलें<br>💬 या नीचे लिखें — हर सवाल का जवाब दूंगा!<br><br>` +
+    (hasKey ? `✨ <b>Claude AI:</b> जटिल सवालों के लिए तैयार!` : `💡 Settings में Claude AI key डालें — और भी smart जवाब!`),
+    ['📋 सभी सेवाएं','🪪 आधार','🚂 ट्रेन टिकट','💰 लोन','📞 संपर्क']
+  );
+  speak('नमस्ते! मैं डिजिटेक साइबर का अल्ट्रा स्मार्ट ए आई हूँ। किसी भी सेवा के बारे में पूछें।');
+}
+
+// ── TABS ──
+function switchTab(tab){
+  curTab = tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+  ['chat','govt','finance','travel','business','rates'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display = t===tab ? 'flex' : 'none';
+    if(t===tab && t!=='chat') document.getElementById('tab-'+t).style.flexDirection='column';
+  });
+  // If switching to chat, scroll to bottom
+  if(tab==='chat'){
+    const c=document.getElementById('tab-chat');
+    setTimeout(()=>c.scrollTop=c.scrollHeight,50);
+  }
+}
+
+// ── MEMORY ──
+const MK='dtv20mem';
+function getMem(){ try{return JSON.parse(localStorage.getItem(MK)||'{}')}catch{return{}} }
+function setMem(o){ localStorage.setItem(MK,JSON.stringify(o)); }
+function saveMem(){
+  const n=document.getElementById('mname').value.trim();
+  const v=document.getElementById('mvillage').value.trim();
+  const s=document.getElementById('mservice').value;
+  const m=getMem();
+  if(n)m.name=n; if(v)m.village=v; if(s)m.service=s;
+  setMem(m); renderMemShow(); showMemBar(); toast('✅ याद कर लिया!'); closeP('memP');
+}
+function clearMem(){ localStorage.removeItem(MK); renderMemShow(); document.getElementById('mbar').classList.remove('show'); toast('🗑️ मिटा दिया'); }
+function renderMemShow(){
+  const m=getMem(),el=document.getElementById('memShow');
+  if(!Object.keys(m).length){el.innerHTML='';return;}
+  el.innerHTML='<div style="font-size:11px;color:var(--gr);margin-bottom:8px;">💾 सहेजी गई जानकारी:</div>'
+    +(m.name?`<div class="mem-row"><span class="ml">👤 नाम</span><span class="mv">${m.name}</span></div>`:'')
+    +(m.village?`<div class="mem-row"><span class="ml">📍 जगह</span><span class="mv">${m.village}</span></div>`:'')
+    +(m.service?`<div class="mem-row"><span class="ml">⭐ सेवा</span><span class="mv">${m.service}</span></div>`:'');
+}
+function showMemBar(){
+  const m=getMem();
+  if(!m.name&&!m.village) return;
+  let txt='';
+  if(m.name) txt+=`नमस्ते ${m.name}! `;
+  if(m.village) txt+=`(${m.village}) `;
+  if(m.service) txt+=`| ${m.service}`;
+  document.getElementById('mgreeting').textContent=txt;
+  document.getElementById('mbar').classList.add('show');
+}
+
+// ── SETTINGS ──
+function saveGmKey(){ const k=document.getElementById('gmKey').value.trim(); if(!k){toast('⚠️ Key खाली!');return;} localStorage.setItem('gemini_api_key',k); geminiKey=k; toast('✅ Gemini Key Saved!'); closeP('setP'); }
+function clrGmKey(){ localStorage.removeItem('gemini_api_key'); geminiKey=null; toast('🗑️ Gemini Key हटाई'); }
+function saveGrKey(){ const k=document.getElementById('grKey').value.trim(); if(!k){toast('⚠️ Key खाली!');return;} localStorage.setItem('groq_api_key',k); groqKey=k; toast('✅ Groq Key Saved!'); closeP('setP'); }
+function clrGrKey(){ localStorage.removeItem('groq_api_key'); groqKey=null; toast('🗑️ Groq Key हटाई'); }
+function saveSrvKey(){ const k=document.getElementById('srvKey').value.trim(); if(!k){toast('⚠️ Key खाली!');return;} localStorage.setItem('sarvam_api_key',k); sarvamKey=k; toast('✅ Sarvam Key Saved!'); closeP('setP'); }
+function clrSrvKey(){ localStorage.removeItem('sarvam_api_key'); sarvamKey=null; toast('🗑️ Sarvam Key हटाई'); }
+function saveClKey(){ const k=document.getElementById('clKey').value.trim(); if(!k){toast('⚠️ Key खाली!');return;} localStorage.setItem('claude_api_key',k); claudeKey=k; toast('✅ Claude Key Saved!'); closeP('setP'); }
+function clrClKey(){ localStorage.removeItem('claude_api_key'); claudeKey=null; toast('🗑️ Claude Key हटाई'); }
+function testVoice(){ speak('नमस्ते! आपकी आवाज़ सेटिंग सही है।'); }
+
+// ── PANELS ──
+function openP(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='memP'){ renderMemShow(); const m=getMem(); if(m.name) document.getElementById('mname').value=m.name; if(m.village) document.getElementById('mvillage').value=m.village; if(m.service) document.getElementById('mservice').value=m.service; }
+  if(id==='setP'){ const sk=localStorage.getItem('sarvam_api_key'); if(sk) document.getElementById('srvKey').value=sk; const ck=localStorage.getItem('claude_api_key'); if(ck) document.getElementById('clKey').value=ck; const gk=localStorage.getItem('gemini_api_key'); if(gk) document.getElementById('gmKey').value=gk; const grk=localStorage.getItem('groq_api_key'); if(grk) document.getElementById('grKey').value=grk; }
+  if(id==='audP') runAudTests();
+}
+function closeP(id){ document.getElementById(id).classList.remove('open'); }
+
+// ── TOAST ──
+function toast(msg){ const t=document.getElementById('toastEl'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+// ══════════════════════════════════════════
+//  KNOWLEDGE BASE — Full 40+ Services
+// ══════════════════════════════════════════
+function r(msg,quick=[]){
+  const contact='<br><br><span style="color:var(--or2);font-size:12px;">📞 <b>अधिक जानकारी के लिए संपर्क करें — 8210073056</b></span>';
+  return {msg:msg+contact, quick, isAI:false};
+}
+
+const KB={
+  aadhaar:{k:['aadhaar','adhar','आधार','आधर'],fn:(t)=>{
+    if(t.includes('update')||t.includes('address')||t.includes('pata')||t.includes('badal')||t.includes('बदल')||t.includes('change'))
+      return r(`🪪 <b>आधार पता अपडेट</b><br><br>✅ कागज़ात: बिजली बिल / राशन कार्ड / बैंक पासबुक<br>✅ समय: 3 से 7 दिन<br>✅ <b>शुल्क: पचास रुपए</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक<br>📍 बछारपुर बाजार, डुमरा, सीतामढ़ी`,['📱 मोबाइल लिंक','🖨️ प्रिंट','🏠 मेनू']);
+    if(t.includes('mobile')||t.includes('number')||t.includes('link')||t.includes('मोबाइल'))
+      return r(`📱 <b>आधार मोबाइल लिंक</b><br><br>✅ OTP सेवाओं के लिए ज़रूरी<br>✅ सिर्फ 10 मिनट<br>✅ <b>शुल्क: एक सौ रुपए</b><br>⏰ सुबह नौ बजे से शाम छः बजे तक`,['🪪 आधार अपडेट','🏠 मेनू']);
+    if(t.includes('print')||t.includes('download')||t.includes('प्रिंट'))
+      return r(`🖨️ <b>आधार प्रिंट</b><br><br>✅ असली प्रिंट — बीस रुपए<br>✅ आधार नंबर लाएं`,['🪪 आधार अपडेट','🏠 मेनू']);
+    if(t.includes('biometric')||t.includes('finger')||t.includes('बायोमेट्रिक'))
+      return r(`👆 <b>आधार बायोमेट्रिक अपडेट</b><br><br>✅ उंगली का निशान बदलना<br>✅ नज़दीकी UIDAI केंद्र से<br>✅ <b>शुल्क: निःशुल्क</b><br>📞 UIDAI Helpline: 1947`,['🪪 आधार','🏠 मेनू']);
+    return r(`🪪 <b>आधार — सभी सेवाएं</b><br><br>✅ पता अपडेट — <b>पचास रुपए</b><br>✅ मोबाइल लिंक — <b>एक सौ रुपए</b><br>✅ प्रिंट — <b>बीस रुपए</b><br>✅ नाम/जन्मतिथि सुधार — <b>एक सौ रुपए</b><br>✅ नया नामांकन — निःशुल्क<br><br>📍 बछारपुर बाजार, डुमरा, सीतामढ़ी`,['📍 पता अपडेट','📱 मोबाइल लिंक','🖨️ प्रिंट','🔗 PAN लिंक']);
+  }},
+  pan:{k:['pan card','pan apply','पैन','पान'],fn:(t)=>{
+    if(t.includes('link')||t.includes('aadhaar')||t.includes('जोड़')) return r(`🔗 <b>PAN-आधार लिंक</b><br><br>⚠️ <b>लिंक नहीं तो PAN अमान्य!</b><br>✅ 5 मिनट का काम<br>✅ <b>शुल्क: पचास रुपए</b>`,['🗂️ नया PAN','🏠 मेनू']);
+    if(t.includes('naya')||t.includes('apply')||t.includes('new')||t.includes('नया')) return r(`🗂️ <b>नया PAN कार्ड</b><br><br>✅ कागज़ात: आधार + फोटो + हस्ताक्षर<br>✅ 7-15 दिन में मिलेगा<br>✅ <b>शुल्क: एक सौ पचास रुपए</b>`,['🔗 PAN-आधार लिंक','🏠 मेनू']);
+    return r(`🗂️ <b>PAN कार्ड</b><br><br>✅ नया PAN — एक सौ पचास रुपए<br>✅ डुप्लीकेट — एक सौ पचास रुपए<br>✅ PAN-आधार लिंक — पचास रुपए<br>✅ सुधार — एक सौ पचास रुपए`,['🆕 नया PAN','🔗 लिंक','🏠 मेनू']);
+  }},
+  train:{k:['train','railway','irctc','tatkal','pnr','ट्रेन','रेलवे','ticket','टिकट'],fn:(t)=>{
+    if(t.includes('tatkal')||t.includes('तत्काल')) return r(`⚡ <b>तत्काल बुकिंग</b><br><br>✅ AC: सुबह 10 बजे से<br>✅ Non-AC: सुबह 11 बजे से<br>✅ <b>शुल्क: पचास रुपए + तत्काल चार्ज</b>`,['🚂 सामान्य','📋 PNR','🏠 मेनू']);
+    if(t.includes('pnr')||t.includes('status')||t.includes('confirm')) return r(`🔍 <b>PNR स्थिति</b><br><br>✅ 10 अंकों का PNR लाएं<br>✅ <b>शुल्क: दस रुपए</b>`,['🚂 टिकट बुक','🏠 मेनू']);
+    if(t.includes('cancel')||t.includes('refund')||t.includes('रद्द')) return r(`❌ <b>ट्रेन रद्दीकरण</b><br><br>✅ 48 घंटे पहले — न्यूनतम कटौती<br>✅ 24-48 घंटे — 25% कटौती<br>✅ 4-24 घंटे — 50% कटौती<br>✅ रिफंड 3-7 दिन में`,['🚂 नया टिकट','🏠 मेनू']);
+    return r(`🚂 <b>ट्रेन टिकट बुकिंग</b><br><br>✅ IRCTC — तीस से पचास रुपए<br>✅ तत्काल उपलब्ध<br>✅ Sleeper, 3AC, 2AC, 1AC, General<br>⏰ 10 मिनट में बुकिंग!`,['⚡ तत्काल','📋 PNR','❌ रद्द','🏠 मेनू']);
+  }},
+  bus:{k:['bus','बस','redbus','bsrtc','roadway'],fn:()=>r(`🚌 <b>बस टिकट बुकिंग</b><br><br>✅ RedBus, BSRTC, सभी राज्य बस<br>✅ सीट नंबर के साथ बुकिंग<br>✅ <b>शुल्क: बीस से तीस रुपए</b>`,['🚂 ट्रेन टिकट','✈️ हवाई टिकट','🏠 मेनू'])},
+  hotel:{k:['hotel','होटल','lodge','dharamshala','oyo','stay'],fn:()=>r(`🏨 <b>होटल बुकिंग</b><br><br>✅ OYO, MakeMyTrip, Booking.com<br>✅ बजट से लेकर लग्जरी तक<br>✅ <b>शुल्क: पचास से एक सौ रुपए</b>`,['✈️ हवाई टिकट','🚂 ट्रेन','🏠 मेनू'])},
+  passport:{k:['passport','पासपोर्ट'],fn:()=>r(`📗 <b>पासपोर्ट सहायता</b><br><br>✅ passportindia.gov.in पर आवेदन<br>✅ Appointment बुकिंग<br>✅ कागज़ात जाँच<br><br>📋 <b>कागज़ात:</b> आधार + PAN + जन्म प्रमाण + फोटो<br>⏰ तत्काल पासपोर्ट: 3-5 दिन<br>⏰ सामान्य: 30-45 दिन`,['🪪 आधार','🗂️ PAN','🏠 मेनू'])},
+  pmkisan:{k:['pm kisan','pmkisan','किसान','किस्त','fasal'],fn:(t)=>{
+    if(t.includes('kyc')||t.includes('ekyc')||t.includes('केवाईसी')) return r(`📱 <b>PM किसान e-KYC</b><br><br>⚠️ <b>बिना e-KYC किस्त बंद!</b><br>✅ 5 मिनट का काम<br>✅ <b>शुल्क: तीस रुपए</b>`,['🌾 PM किसान','🏠 मेनू']);
+    if(t.includes('status')||t.includes('check')||t.includes('kab')) return r(`🔍 <b>PM किसान स्थिति</b><br><br>✅ किस्त चेक — बीस रुपए`,['📱 e-KYC','🏠 मेनू']);
+    return r(`🌾 <b>PM किसान सम्मान निधि</b><br><br>✅ नया पंजीकरण — एक सौ रुपए<br>✅ e-KYC — तीस रुपए<br>✅ स्थिति जांच — बीस रुपए<br>✅ बैंक अपडेट — पचास रुपए<br><br>⚠️ <b>e-KYC नहीं तो छह हजार प्रति वर्ष बंद!</b>`,['📱 e-KYC','📝 पंजीकरण','🔍 स्थिति','🏠 मेनू']);
+  }},
+  pmawas:{k:['pm awas','awas','pmay','housing','मकान','घर योजना'],fn:(t)=>{
+    if(t.includes('status')||t.includes('check')) return r(`🔍 <b>PM आवास स्थिति</b><br><br>✅ pmaymis.gov.in पर जांच<br>✅ <b>शुल्क: पचास रुपए</b>`,['🏠 PM आवास','🏠 मेनू']);
+    return r(`🏠 <b>PM आवास योजना</b><br><br>🌟 <b>गरीब परिवार को पक्का घर!</b><br>✅ ग्रामीण: एक लाख बीस से तीस हजार<br>✅ शहरी: सब्सिडी<br><br>📋 आधार + बैंक + राशन कार्ड + BPL + ज़मीन<br>💰 <b>शुल्क: दो सौ से पाँच सौ रुपए</b>`,['🔍 स्थिति','📜 दाखिल खारिज','🏠 मेनू']);
+  }},
+  epf:{k:['epf','pf','provident fund','ईपीएफ','pf withdrawal','pf balance'],fn:(t)=>{
+    if(t.includes('withdraw')||t.includes('claim')) return r(`💼 <b>PF निकासी</b><br><br>✅ UAN + आधार + बैंक लिंक ज़रूरी<br>⏰ 15-20 दिन में पैसे<br>📞 EPFO: 1800-118-005`,['🔍 PF बैलेंस','🏠 मेनू']);
+    if(t.includes('balance')||t.includes('kitna')) return r(`🔍 <b>EPF बैलेंस</b><br><br>1️⃣ SMS: EPFOHO UAN ENG → 7738299899<br>2️⃣ Missed Call: 011-22901406<br>3️⃣ App: UMANG`,['💼 PF निकासी','🏠 मेनू']);
+    return r(`🏦 <b>EPF / भविष्य निधि</b><br><br>✅ वेतन का 24% जमा<br>✅ ब्याज: 8.25%/वर्ष<br>✅ बैलेंस, निकासी, UAN सहायता`,['💼 PF निकासी','🔍 PF बैलेंस','🏠 मेनू']);
+  }},
+  bijli:{k:['bijli','electricity','meter','light bill','बिजली','बिल'],fn:(t)=>{
+    if(t.includes('bill')||t.includes('pay')) return r(`⚡ <b>बिजली बिल भुगतान</b><br><br>✅ सभी बिजली कंपनियां<br>✅ <b>शुल्क: बीस से पचास रुपए</b>`,['⚡ नया मीटर','🏠 मेनू']);
+    return r(`⚡ <b>बिजली सेवाएं</b><br><br>✅ नया कनेक्शन — दो सौ से पाँच सौ रुपए<br>✅ बिल भुगतान — बीस से पचास रुपए<br>✅ नाम बदलाव — दो सौ से तीन सौ<br>✅ लोड बढ़ाना`,['💰 बिल भुगतान','🏠 मेनू']);
+  }},
+  dakhilkharij:{k:['dakhil','दाखिल खारिज','जमीन','ज़मीन','land','zameen','mutation','जमाबंदी'],fn:()=>r(`📜 <b>दाखिल खारिज / भूमि</b><br><br>✅ दाखिल खारिज — दो सौ से पाँच सौ<br>✅ जमाबंदी — पचास से एक सौ<br>✅ खाता-खसरा — पचास से एक सौ<br>✅ ज़मीन रजिस्ट्री सहायता<br><br>⏰ 30-60 दिन`,['🏠 PM आवास','📄 प्रमाण पत्र','🏠 मेनू'])},
+  certificate:{k:['certificate','jati','caste','जाति','income','aay','आय','niwas','निवास','praman','प्रमाण पत्र'],fn:(t)=>{
+    if(t.includes('जाति')||t.includes('caste')) return r(`📄 <b>जाति प्रमाण पत्र</b><br><br>✅ SC/ST/OBC के लिए<br>✅ कागज़ात: आधार + राशन कार्ड + फोटो<br>✅ <b>शुल्क: एक सौ से दो सौ रुपए</b><br>⏰ 3-7 दिन`,['📄 आय प्रमाण','📄 निवास प्रमाण','🏠 मेनू']);
+    if(t.includes('आय')||t.includes('income')) return r(`📄 <b>आय प्रमाण पत्र</b><br><br>✅ बैंक लोन, स्कूल, योजनाओं के लिए<br>✅ <b>शुल्क: एक सौ से दो सौ रुपए</b>`,['📄 जाति प्रमाण','📄 निवास प्रमाण','🏠 मेनू']);
+    return r(`📄 <b>सरकारी प्रमाण पत्र</b><br><br>✅ जाति — एक सौ से दो सौ<br>✅ आय — एक सौ से दो सौ<br>✅ निवास — एक सौ से दो सौ<br>✅ मृत्यु/जन्म प्रमाण पत्र<br>⏰ 3-7 दिन`,['📄 जाति','📄 आय','📄 निवास','🏠 मेनू']);
+  }},
+  voter:{k:['voter id','voter','vote','matdata','मतदाता','वोटर'],fn:()=>r(`🗳️ <b>मतदाता पहचान पत्र</b><br><br>✅ नया पंजीकरण<br>✅ सुधार, स्थानांतरण, प्रिंट<br>✅ <b>शुल्क: पचास से एक सौ रुपए</b>`,['🪪 आधार','📄 प्रमाण पत्र','🏠 मेनू'])},
+  dl:{k:['driving licence','driving license','dl','ड्राइविंग','लाइसेंस'],fn:(t)=>{
+    if(t.includes('learning')||t.includes('ll')||t.includes('learner')) return r(`📋 <b>लर्निंग लाइसेंस</b><br><br>✅ 18 साल से ऊपर<br>✅ <b>शुल्क: दो सौ रुपए</b><br>⏰ 30 दिन Valid`,['🚗 परमानेंट DL','🏠 मेनू']);
+    if(t.includes('renewal')||t.includes('renew')||t.includes('नवीन')) return r(`🔄 <b>DL नवीनीकरण</b><br><br>✅ <b>शुल्क: तीन सौ से पाँच सौ रुपए</b>`,['🚗 नया DL','🏠 मेनू']);
+    return r(`🚗 <b>ड्राइविंग लाइसेंस</b><br><br>✅ LL (Learning) — दो सौ<br>✅ स्थायी DL — तीन सौ से पाँच सौ<br>✅ नवीनीकरण — तीन सौ से पाँच सौ<br>✅ डुप्लीकेट DL`,['📋 Learning DL','🔄 नवीनीकरण','🏠 मेनू']);
+  }},
+  scholarship:{k:['scholarship','छात्रवृत्ति','sc st obc','padhai','education help'],fn:()=>r(`🎓 <b>छात्रवृत्ति सेवाएं</b><br><br>✅ NSP (SC/ST/OBC) — scholarships.gov.in<br>✅ बिहार राज्य छात्रवृत्ति<br>✅ मुख्यमंत्री कन्या उत्थान — पच्चीस हजार<br>✅ पोस्ट मैट्रिक स्कॉलरशिप<br><br>💰 <b>शुल्क: पचास से एक सौ रुपए</b>`,['📄 आय प्रमाण','📄 जाति प्रमाण','🏠 मेनू'])},
+  insurance:{k:['insurance','bima','बीमा','pmjjby','pmsby','jeevan bima','accident'],fn:(t)=>{
+    if(t.includes('pmjjby')||t.includes('jeevan')||t.includes('life')) return r(`❤️ <b>PMJJBY — जीवन बीमा</b><br><br>✅ चार सौ छत्तीस रुपए/वर्ष में दो लाख बीमा<br>✅ 18-50 वर्ष<br>💰 <b>शुल्क: पचास रुपए</b>`,['🛡️ PMSBY','💰 APY','🏠 मेनू']);
+    if(t.includes('pmsby')||t.includes('accident')||t.includes('दुर्घटना')) return r(`🛡️ <b>PMSBY — दुर्घटना बीमा</b><br><br>✅ बीस रुपए/वर्ष में दो लाख कवर<br>💰 <b>शुल्क: तीस रुपए</b>`,['❤️ PMJJBY','💰 APY','🏠 मेनू']);
+    if(t.includes('fasal')||t.includes('crop')||t.includes('फसल')) return r(`🌾 <b>PM फसल बीमा (PMFBY)</b><br><br>✅ प्राकृतिक आपदा से फसल नुकसान पर<br>✅ रबी + खरीफ दोनों के लिए<br>✅ किसान क्रेडिट कार्ड वालों के लिए अनिवार्य`,['🌾 PM किसान','🏠 मेनू']);
+    return r(`🛡️ <b>बीमा सेवाएं</b><br><br>✅ PMJJBY जीवन बीमा — चार सौ छत्तीस/वर्ष<br>✅ PMSBY दुर्घटना बीमा — बीस/वर्ष<br>✅ APY अटल पेंशन<br>✅ PM फसल बीमा`,['❤️ जीवन बीमा','🛡️ दुर्घटना बीमा','🌾 फसल बीमा','🏠 मेनू']);
+  }},
+  apy:{k:['apy','atal pension','अटल पेंशन','pension yojana'],fn:()=>r(`🧓 <b>APY — अटल पेंशन योजना</b><br><br>✅ 60 साल के बाद एक हजार से पाँच हजार/माह पेंशन<br>✅ 18-40 साल तक जुड़ सकते हैं<br>✅ बैंक खाता + आधार ज़रूरी<br>✅ मृत्यु पर पति/पत्नी को पेंशन`,['🛡️ बीमा','💰 लोन','🏠 मेनू'])},
+  loan:{k:['loan','लोन','emi','mudra','home loan','personal loan','business loan','bike loan','car loan'],fn:(t)=>{
+    if(t.includes('home')||t.includes('ghar')||t.includes('घर')) return r(`🏠 <b>होम लोन</b><br><br>✅ 8.5-10% ब्याज दर<br>✅ कागज़ात: आधार + PAN + आय प्रमाण + संपत्ति<br>✅ SBI, PNB, BOI से सहायता`,['🏠 PM आवास','🏠 मेनू']);
+    if(t.includes('mudra')||t.includes('business')||t.includes('vyapar')||t.includes('व्यापार')) return r(`💼 <b>MUDRA व्यापार लोन</b><br><br>✅ शिशु: पचास हजार तक (बिना गारंटी)<br>✅ किशोर: पचास हजार से पाँच लाख<br>✅ तरुण: पाँच से दस लाख<br><br>📋 आधार + PAN + व्यापार + 6 महीने बैंक स्टेटमेंट`,['🏦 बैंक खाता','📊 GST','🏠 मेनू']);
+    if(t.includes('bike')||t.includes('vehicle')||t.includes('गाड़ी')) return r(`🏍️ <b>बाइक/गाड़ी लोन</b><br><br>✅ 10-15% ब्याज दर<br>✅ कागज़ात: आधार + PAN + आय प्रमाण<br>✅ कम से कम 6 महीने की नौकरी`,['💰 पर्सनल लोन','🏠 मेनू']);
+    return r(`💰 <b>लोन सेवाएं</b><br><br>✅ बाइक/कार लोन<br>✅ MUDRA व्यापार लोन (बिना गारंटी)<br>✅ होम लोन<br>✅ व्यक्तिगत लोन<br>✅ KCC किसान क्रेडिट कार्ड<br>✅ ज़मीन पर लोन (LAP)<br><br>💰 जानकारी मुफ्त!`,['🏍️ बाइक लोन','💼 MUDRA लोन','🏠 होम लोन','🏠 मेनू']);
+  }},
+  gst:{k:['gst','जीएसटी','goods service tax','gst return','gst number'],fn:(t)=>{
+    if(t.includes('return')||t.includes('filing')) return r(`📊 <b>GST Return Filing</b><br><br>✅ GSTR-1 + GSTR-3B मासिक<br>✅ <b>शुल्क: तीन सौ रुपए से</b>`,['📊 GST पंजीकरण','📝 ITR','🏠 मेनू']);
+    return r(`📊 <b>GST सेवाएं</b><br><br>✅ नया GST नंबर — पाँच सौ से<br>✅ मासिक रिटर्न — तीन सौ से<br>✅ GST रद्दीकरण<br><br>⚠️ टर्नओवर >बीस लाख (सेवा) / चालीस लाख (माल) हो तो ज़रूरी`,['💼 व्यापार लोन','📝 ITR','🏠 मेनू']);
+  }},
+  itr:{k:['itr','income tax','tax filing','tax return','आयकर','टैक्स'],fn:(t)=>{
+    if(t.includes('refund')||t.includes('वापसी')) return r(`💰 <b>आयकर रिफंड</b><br><br>✅ Form 16 ज़रूरी<br>✅ <b>शुल्क: दो सौ से पाँच सौ</b><br>⏰ रिफंड 2-3 महीने में`,['📊 GST','🏠 मेनू']);
+    return r(`📝 <b>ITR — आयकर रिटर्न</b><br><br>✅ नौकरीपेशा + व्यापारी दोनों<br>✅ अंतिम तिथि: 31 जुलाई<br>✅ <b>शुल्क: दो सौ से पाँच सौ रुपए</b>`,['📊 GST','💼 लोन','🏠 मेनू']);
+  }},
+  udyam:{k:['udyam','msme','udyog aadhaar','small business','उद्योग','उद्यम'],fn:()=>r(`🏭 <b>Udyam / MSME पंजीकरण</b><br><br>✅ छोटे व्यापारियों के लिए<br>✅ सरकारी लोन, सब्सिडी के लिए ज़रूरी<br>✅ <b>शुल्क: दो सौ से तीन सौ रुपए</b><br><br>📋 कागज़ात: आधार + PAN + बैंक खाता + व्यापार का पता`,['📊 GST','💼 MUDRA लोन','🏠 मेनू'])},
+  exam:{k:['exam form','ssc','rrb','upsc','police exam','army exam','ibps','ctet','परीक्षा','फॉर्म'],fn:()=>r(`📝 <b>परीक्षा फॉर्म</b><br><br>✅ Railway (RRB/NTPC/Group D)<br>✅ SSC (CGL/CHSL/MTS/GD)<br>✅ UPSC / BPSC / राज्य PSC<br>✅ पुलिस, सेना, CISF, BSF<br>✅ बैंक (IBPS/SBI/RBI/PO)<br>✅ शिक्षक (CTET/BTET/STET)<br>✅ बिहार सरकार सभी परीक्षाएं<br><br>💰 <b>शुल्क: तीस से एक सौ रुपए</b>`,['🪪 आधार','🗂️ PAN','🏠 मेनू'])},
+  flight:{k:['flight','hawai','हवाई','फ्लाइट','air ticket','airplane','indigo','air india'],fn:()=>r(`✈️ <b>हवाई टिकट</b><br><br>✅ IndiGo, Air India, SpiceJet, Vistara<br>✅ घरेलू + अंतर्राष्ट्रीय<br>✅ सबसे सस्ता किराया ढूंढते हैं<br>💰 <b>शुल्क: एक सौ से दो सौ रुपए</b>`,['🚂 ट्रेन टिकट','🚌 बस टिकट','🏠 मेनू'])},
+  wifi:{k:['wifi','wi-fi','internet','broadband','वाईफाई','इंटरनेट','fiber'],fn:()=>r(`📶 <b>WiFi / Internet इंस्टॉलेशन</b><br><br>✅ BSNL, Airtel Fiber, Jio Fiber<br>✅ घर, दुकान, ऑफिस<br>✅ सेटअप + कॉन्फिगरेशन<br>💰 <b>दर: काम के हिसाब से — कॉल करें!</b>`,['📢 विज्ञापन','📞 संपर्क','🏠 मेनू'])},
+  dth:{k:['dth','recharge','रिचार्ज','tata sky','dish tv','airtel dth','mobile recharge','top up'],fn:()=>r(`📡 <b>DTH / मोबाइल रिचार्ज</b><br><br>✅ Tata Sky, Dish TV, Airtel DTH<br>✅ Jio, Airtel, Vi, BSNL मोबाइल<br>✅ सभी ऑपरेटर रिचार्ज<br>💰 <b>शुल्क: दस से बीस रुपए</b>`,['📶 WiFi','📞 संपर्क','🏠 मेनू'])},
+  ad:{k:['advertisement','video banao','audio ad','विज्ञापन','marketing','prachar','poster','banner','social media'],fn:(t)=>{
+    if(t.includes('audio')||t.includes('radio')) return r(`🎙️ <b>ऑडियो विज्ञापन</b><br><br>✅ पेशेवर हिंदी ऑडियो<br>✅ WhatsApp, Radio Style<br>💰 <b>शुल्क: दो सौ से एक हजार रुपए</b>`,['🎬 वीडियो','📞 संपर्क','🏠 मेनू']);
+    if(t.includes('video')) return r(`🎬 <b>वीडियो विज्ञापन</b><br><br>✅ YouTube, Facebook, WhatsApp<br>✅ हिंदी/स्थानीय भाषा<br>💰 <b>शुल्क: पाँच सौ से दो हजार रुपए</b>`,['🎙️ ऑडियो','📞 संपर्क','🏠 मेनू']);
+    if(t.includes('poster')||t.includes('banner')||t.includes('design')) return r(`🎨 <b>Banner / Poster Design</b><br><br>✅ दुकान, शादी, आयोजन<br>✅ Print + Digital दोनों<br>💰 <b>शुल्क: एक सौ से पाँच सौ रुपए</b>`,['📱 Social Media','📞 संपर्क','🏠 मेनू']);
+    if(t.includes('social')||t.includes('facebook')||t.includes('instagram')) return r(`📱 <b>Social Media Marketing</b><br><br>✅ Facebook Page बनाना<br>✅ Instagram Setup<br>✅ Paid Ads Campaign<br>💰 <b>शुल्क: तीन सौ से एक हजार रुपए</b>`,['🎬 वीडियो विज्ञापन','📞 संपर्क','🏠 मेनू']);
+    return r(`📢 <b>विज्ञापन और Digital सेवाएं</b><br><br>✅ ऑडियो — दो सौ से एक हजार<br>✅ वीडियो — पाँच सौ से दो हजार<br>✅ Banner/Poster — एक सौ से पाँच सौ<br>✅ Social Media Page — तीन सौ से एक हजार<br>✅ WhatsApp Campaign`,['🎙️ ऑडियो','🎬 वीडियो','🎨 Poster','📱 Social Media','🏠 मेनू']);
+  }},
+  sukanya:{k:['sukanya','sukanya samriddhi','सुकन्या','beti','daughter'],fn:()=>r(`👧 <b>सुकन्या समृद्धि योजना</b><br><br>🌟 <b>बेटी के लिए सबसे अच्छी योजना!</b><br><br>✅ 10 साल से कम बेटी के लिए<br>✅ ब्याज: 8.2% (कर-मुक्त!)<br>✅ न्यूनतम: ढाई सौ/वर्ष<br>✅ अधिकतम: डेढ़ लाख/वर्ष<br>✅ 80C में कर लाभ<br>📍 डाकघर या बैंक में खोलें`,['💰 PPF','🛡️ बीमा','🏠 मेनू'])},
+  ppf:{k:['ppf','public provident','पीपीएफ','post office saving'],fn:()=>r(`💰 <b>PPF — भविष्य निधि</b><br><br>✅ ब्याज: 7.1% (कर-मुक्त!)<br>✅ न्यूनतम: पाँच सौ/वर्ष<br>✅ परिपक्वता: 15 साल<br>✅ 80C में कर लाभ<br>📍 डाकघर या SBI/PNB`,['👧 सुकन्या','🏦 EPF','🏠 मेनू'])},
+  bank:{k:['bank account','बैंक खाता','zero balance','jan dhan','account open','खाता खोलना'],fn:()=>r(`🏦 <b>बैंक खाता (Zero Balance)</b><br><br>✅ Jan Dhan खाता — बिल्कुल मुफ्त<br>✅ SBI, PNB, BOI, UBI<br>✅ RuPay Debit Card मिलेगा<br>✅ 2 लाख दुर्घटना बीमा मुफ्त<br><br>📋 कागज़ात: आधार + फोटो`,['💰 PM किसान','🛡️ बीमा','🏠 मेनू'])},
+  fd:{k:['fd','fixed deposit','recurring','rd','सावधि जमा'],fn:()=>r(`🏛️ <b>FD — सावधि जमा</b><br><br>✅ SBI: 6.5-7.5%/वर्ष<br>✅ डाकघर: 7.5%/वर्ष<br>✅ लघु वित्त बैंक: 8-9%<br>✅ वरिष्ठ नागरिक: 0.5% अतिरिक्त<br>✅ सुरक्षित निवेश, कोई जोखिम नहीं`,['💰 PPF','📊 म्यूचुअल फंड','🏠 मेनू'])},
+  sharemarket:{k:['share market','stock','mutual fund','sip','demat','शेयर','निवेश'],fn:(t)=>{
+    if(t.includes('mutual fund')||t.includes('sip')) return r(`📊 <b>म्यूचुअल फंड / SIP</b><br><br>✅ पाँच सौ/माह से शुरू<br>✅ 12-15% दीर्घकालिक रिटर्न<br>✅ Groww, Zerodha, HDFC Sky<br>⚠️ बाज़ार जोखिम समझकर निवेश करें`,['📈 शेयर बाज़ार','💰 PPF','🏠 मेनू']);
+    return r(`📈 <b>डीमैट खाता / शेयर बाज़ार</b><br><br>✅ Zerodha, Upstox, Angel One<br>✅ <b>हमारी सेवा: एक सौ से दो सौ रुपए</b><br>✅ 15-20 मिनट में खाता<br>📋 PAN + आधार + बैंक + सेल्फी`,['📊 म्यूचुअल फंड','📝 ITR','🏠 मेनू']);
+  }},
+  ration:{k:['ration card','ration','राशन','bpl','apl'],fn:()=>r(`🛒 <b>राशन कार्ड</b><br><br>✅ नया कार्ड: ब्लॉक ऑफिस या CSC<br>✅ सुधार: नाम, पता, सदस्य जोड़ना<br>✅ आधार से लिंक ज़रूरी<br>✅ PM गरीब कल्याण अनाज योजना<br><br>📋 आधार + फोटो + आय प्रमाण`,['📄 प्रमाण पत्र','🏠 PM आवास','🏠 मेनू'])},
+  ayushman:{k:['ayushman','ayushman bharat','health card','pmjay','golden card','hospital'],fn:()=>r(`🏥 <b>आयुष्मान भारत — PMJAY</b><br><br>🌟 <b>पाँच लाख तक मुफ्त इलाज!</b><br><br>✅ pmjay.gov.in पर पात्रता जांचें<br>✅ BPL परिवार के लिए<br>✅ 1350+ बीमारियों का इलाज<br>📋 आधार + राशन कार्ड`,['🏠 PM आवास','📄 प्रमाण पत्र','🏠 मेनू'])},
+  nrega:{k:['nrega','mnrega','job card','rozgar','मनरेगा','जॉब कार्ड'],fn:()=>r(`🔨 <b>मनरेगा — जॉब कार्ड</b><br><br>✅ 100 दिन का गारंटीकृत काम<br>✅ बिहार में दो सौ अट्ठाईस रुपए/दिन<br>✅ 15 दिन में जॉब कार्ड<br>📍 ग्राम पंचायत से बनवाएं`,['🌾 PM किसान','🏠 मेनू'])},
+  pension:{k:['old age pension','widow pension','vidhwa','vridha','बुजुर्ग','विधवा','pension'],fn:()=>r(`👴 <b>सामाजिक पेंशन</b><br><br>✅ वृद्धजन (60+): चार-पाँच सौ/माह<br>✅ विधवा पेंशन: चार सौ/माह<br>✅ दिव्यांग पेंशन: चार सौ/माह<br>📍 प्रखंड विकास कार्यालय`,['🏠 PM आवास','📄 प्रमाण पत्र','🏠 मेनू'])},
+  contact:{k:['contact','address','kahan hai','timing','phone','कहाँ','पता','फोन','संपर्क','location'],fn:()=>r(`📞 <b>DigiTech Cyber CSC</b><br><br>📍 <b>बछारपुर बाजार</b><br>आज़मगढ़ पंचायत, डुमरा<br>सीतामढ़ी, बिहार — 843323<br><br>📱 <b>8210073056</b><br>⏰ <b>सुबह नौ बजे से शाम छः बजे तक</b><br>सोमवार से शनिवार<br><br>🟢 WhatsApp पर भी उपलब्ध!`,['📋 सभी सेवाएं','🏠 मेनू'])},
+  all:{k:['sab services','all service','sabhi','services list','rate list','kitna lagta','सभी सेवाएं','सब'],fn:()=>r(`📋 <b>DigiTech Cyber — सभी सेवाएं</b><br><br>🪪 आधार: पचास से | PAN: एक सौ पचास<br>🗳️ Voter ID: पचास से | DL: दो सौ से<br>📄 प्रमाण पत्र: एक सौ से दो सौ<br>🚂 ट्रेन: तीस-पचास | ✈️ फ्लाइट: एक सौ-दो सौ<br>🌾 PM किसान eKYC: तीस | पंजीकरण: एक सौ<br>🏠 PM आवास: दो सौ से पाँच सौ<br>📊 GST: पाँच सौ से | ITR: दो सौ से<br>🎬 विज्ञापन: दो सौ से दो हजार<br>📶 WiFi: कॉल करें<br><br>📞 <b>8210073056</b><br>⏰ सोमवार-शनिवार, नौ से छः`,['📞 संपर्क','💲 दरें देखें','🏠 मेनू'])},
+  thanks:{k:['thanks','thank you','shukriya','dhanyawad','धन्यवाद','शुक्रिया','bahut achha'],fn:()=>r(`😊 <b>बहुत खुशी हुई मदद करके!</b><br><br>कोई भी काम हो — कभी भी पूछें!<br>📞 <b>8210073056</b><br>🙏 <b>DigiTech Cyber — आपकी सेवा में सदा!</b>`,['📋 सभी सेवाएं','📞 संपर्क','🏠 मेनू'])}
+};
+
+function getResp(text){
+  const t=text.toLowerCase();
+  for(const k in KB){ if(KB[k].k.some(kw=>t.includes(kw))) return KB[k].fn(t); }
+  if(t.match(/^(hi|hello|hey|namaste|नमस्ते|हाय|namaskar)[\s!?]*$/)||t.includes('menu')||t.includes('wapas')||t.includes('home')){
+    const m=getMem(), nm=m.name?`${m.name} जी`:'दोस्त';
+    return r(`🙏 <b>नमस्ते ${nm}!</b><br><br>किसी भी सेवा के बारे में पूछें!<br>📞 <b>8210073056</b>`,['🪪 आधार','🚂 ट्रेन','🌾 PM किसान','💰 लोन','📊 GST/ITR','📞 संपर्क','📋 सभी']);
+  }
+  if(t.includes('ok')||t.includes('theek')||t.includes('achha')||t.includes('ठीक'))
+    return r(`😊 ठीक है! और कुछ काम हो तो बताएं!`,['📋 सभी','📞 संपर्क']);
+  return {msg:`🤖 "<b>${text}</b>" — सीधे बात करें:<br><br>📞 <b>8210073056</b><br>⏰ सुबह नौ से शाम छः`,quick:['📋 सभी','📞 संपर्क'],isAI:false,needsAI:true};
+}
+
+// ══ AI ENGINE — Claude → Gemini → Groq (Smart Fallback) ══
+const AI_SYS=`You are DigiTech Cyber Smart AI assistant for a CSC shop in Bihar, India.
+Shop: Bachharpur Bazar, Azamgarh Panchayat, Dumra, Sitamarhi, Bihar 843323. Phone: 8210073056. Timings: Mon-Sat 9AM-6PM.
+ALWAYS reply in warm, simple Hindi (Devanagari script). Max 100 words. Sound like an experienced helpful CSC operator.
+Give step-by-step answers. Mention rates when relevant.
+Services & rates: Aadhaar update(50), mobile link(100), print(20), PAN new(150), PAN-Aadhaar link(50), Voter ID(50-100), DL(200-500), Train ticket(30-50), Tatkal(50+), Flight(100-200), Bus(20-30), Hotel(50-100), PM Kisan eKYC(30), PM Awas(200-500), GST registration(500+), ITR filing(200-500), Exam forms(30-100), Demat account(100-200), WiFi installation, Audio ad(200-1000), Video ad(500-2000), Banner/Poster(100-500), Social Media(300-1000), all certificates(100-200), MSME/Udyam(200-300), Passport help, Loan info, Insurance PMJJBY(50)/PMSBY(30).
+End EVERY reply with exactly: 📞 अधिक जानकारी के लिए संपर्क करें — 8210073056`;
+
+// ── Claude AI ──
+async function callClaude(text){
+  const key=claudeKey||localStorage.getItem('claude_api_key');
+  if(!key) return null;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,system:AI_SYS,messages:[{role:'user',content:text}]})
+    });
+    if(!res.ok) return null;
+    const d=await res.json();
+    return d.content?.[0]?.text||null;
+  }catch(e){return null;}
+}
+
+// ── Gemini AI (Free) ──
+async function callGemini(text){
+  const key=geminiKey||localStorage.getItem('gemini_api_key');
+  if(!key) return null;
+  try{
+    const prompt=AI_SYS+'\n\nUser question: '+text;
+    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+key,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:300,temperature:0.7}})
+    });
+    if(!res.ok) return null;
+    const d=await res.json();
+    return d.candidates?.[0]?.content?.parts?.[0]?.text||null;
+  }catch(e){return null;}
+}
+
+// ── Groq AI (Free — Llama 3) ──
+async function callGroq(text){
+  const key=groqKey||localStorage.getItem('groq_api_key');
+  if(!key) return null;
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({model:'llama-3.1-8b-instant',max_tokens:300,messages:[{role:'system',content:AI_SYS},{role:'user',content:text}]})
+    });
+    if(!res.ok) return null;
+    const d=await res.json();
+    return d.choices?.[0]?.message?.content||null;
+  }catch(e){return null;}
+}
+
+// ── Smart AI Chain: Gemini → Groq → Claude ──
+async function callAI(text){
+  // Priority: Gemini (free) → Groq (free) → Claude (paid)
+  let result=null;
+  let usedEngine='';
+
+  const gKey=geminiKey||localStorage.getItem('gemini_api_key');
+  const grKey=groqKey||localStorage.getItem('groq_api_key');
+  const cKey=claudeKey||localStorage.getItem('claude_api_key');
+
+  if(gKey){
+    setSt('✨ Gemini AI सोच रहा है...','think');
+    result=await callGemini(text);
+    if(result) usedEngine='gemini';
+  }
+  if(!result&&grKey){
+    setSt('⚡ Groq AI सोच रहा है...','think');
+    result=await callGroq(text);
+    if(result) usedEngine='groq';
+  }
+  if(!result&&cKey){
+    setSt('🤖 Claude AI सोच रहा है...','think');
+    result=await callClaude(text);
+    if(result) usedEngine='claude';
+  }
+
+  if(result) result._engine=usedEngine;
+  return result;
+}
+
+// ══ VOICE ENGINE ══
+function loadHindiVoice(){
+  if(!synth) return;
+  const vv=synth.getVoices();
+  hindiVoice=vv.find(v=>v.name==='Google हिन्दी')||vv.find(v=>v.lang==='hi-IN'&&v.name.includes('Microsoft'))||vv.find(v=>v.lang==='hi-IN')||vv.find(v=>v.lang.startsWith('hi'))||null;
+}
+
+function cleanTxt(t){
+  let s=t.replace(/<[^>]*>/g,' ');
+  s=s.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g,'');
+  s=s.replace(/[\u2600-\u27BF\u2300-\u23FF\u2B00-\u2BFF]/g,'');
+  s=s.replace(/Bachharpur Bazar/gi,'बछारपुर बाजार').replace(/Sitamarhi/gi,'सीतामढ़ी').replace(/Dumra/gi,'डुमरा').replace(/Bihar/gi,'बिहार');
+  s=s.replace(/\b(\d{10})\b/g,m=>m.split('').join(' '));
+  s=s.replace(/[•|—\/]/g,' ').replace(/\s+/g,' ').trim();
+  return s.substring(0,450);
+}
+
+async function speakSarvam(text){
+  const key=sarvamKey||localStorage.getItem('sarvam_api_key');
+  if(!key){speakRV(text);return;}
+  try{
+    isSpeak=true; setSt('🔊 बोल रही हूँ...','speak'); setMic('🔊','speak');
+    const res=await fetch('https://api.sarvam.ai/text-to-speech',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','api-subscription-key':key},
+      body:JSON.stringify({inputs:[text.substring(0,450)],target_language_code:'hi-IN',speaker:'anushka',pitch:0,pace:speechRate,loudness:1.5,speech_sample_rate:22050,enable_preprocessing:true,model:'bulbul:v2'})
+    });
+    if(!res.ok) throw new Error('Sarvam '+res.status);
+    const d=await res.json();
+    if(d.audios&&d.audios[0]){
+      const au=new Audio('data:audio/wav;base64,'+d.audios[0]);
+      au.onended=()=>{isSpeak=false;resetUI();};
+      au.onerror=()=>{isSpeak=false;resetUI();speakRV(text);};
+      au.play().catch(()=>{isSpeak=false;resetUI();speakRV(text);});
+    }else throw new Error('No audio');
+  }catch(e){isSpeak=false;resetUI();speakRV(text);}
+}
+
+function speakRV(text){
+  if(typeof responsiveVoice!=='undefined'){
+    try{
+      responsiveVoice.cancel();
+      responsiveVoice.speak(text,'Hindi Female',{
+        rate:speechRate,pitch:1,volume:1,
+        onstart:()=>{isSpeak=true;setSt('🔊 बोल रही हूँ...','speak');setMic('🔊','speak');},
+        onend:()=>{isSpeak=false;resetUI();},
+        onerror:()=>{isSpeak=false;resetUI();speakBrowser(text);}
+      });
+      return;
+    }catch(e){}
+  }
+  speakBrowser(text);
+}
+
+function speakBrowser(text){
+  if(!synth){isSpeak=false;resetUI();return;}
+  synth.cancel();
+  if(!hindiVoice) loadHindiVoice();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='hi-IN';u.rate=speechRate;u.pitch=0.95;u.volume=1;
+  if(hindiVoice) u.voice=hindiVoice;
+  const rt=setInterval(()=>{if(synth.speaking)synth.resume();},5000);
+  u.onstart=()=>{isSpeak=true;setSt('🔊 बोल रहा हूँ...','speak');setMic('🔊','speak');};
+  u.onend=()=>{clearInterval(rt);isSpeak=false;resetUI();};
+  u.onerror=()=>{clearInterval(rt);isSpeak=false;resetUI();};
+  synth.speak(u);
+}
+
+function speak(text){
+  if(synth) synth.cancel();
+  if(typeof responsiveVoice!=='undefined'){try{responsiveVoice.cancel();}catch(e){}}
+  const clean=cleanTxt(text);
+  if(!clean||clean.length<3) return;
+  const hasSarvam=!!(sarvamKey||localStorage.getItem('sarvam_api_key'));
+  if(hasSarvam){speakSarvam(clean);return;}
+  speakRV(clean);
+}
+
+// ── MIC ──
+function toggleMic(){
+  if(isSpeak){if(synth)synth.cancel();if(typeof responsiveVoice!=='undefined'){try{responsiveVoice.cancel();}catch(e){}}isSpeak=false;resetUI();return;}
+  if(isListen){stopL();return;}
+  startL();
+}
+function startL(){
+  if(!('webkitSpeechRecognition'in window||'SpeechRecognition'in window)){alert('Voice के लिए Chrome use करें!');return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recog=new SR();recog.lang='hi-IN';recog.interimResults=true;
+  recog.onstart=()=>{isListen=true;setMic('🔴','listen');setSt('🎤 सुन रहा हूँ... बोलें!','listen');};
+  recog.onresult=(e)=>{let tr='';for(let i=e.resultIndex;i<e.results.length;i++) tr+=e.results[i][0].transcript; document.getElementById('txtin').value=tr; if(e.results[e.results.length-1].isFinal){stopL();setTimeout(()=>send(),300);}};
+  recog.onerror=()=>stopL(); recog.onend=()=>{if(isListen)stopL();}; recog.start();
+}
+function stopL(){isListen=false;if(recog)recog.stop();resetUI();}
+
+// ── CHAT ──
+function addBotMsg(text, quick=[], isAI=false, engine=''){
+  switchTab('chat');
+  const area=document.getElementById('tab-chat');
+  // Remove old QR
+  area.querySelectorAll('.qr-row').forEach(e=>e.remove());
+  const d=document.createElement('div'); d.className='msg bot';
+  const fmt=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+  const engineLabels={gemini:'🟡 Gemini AI',groq:'⚡ Groq AI',claude:'🔵 Claude AI',ai:'✨ AI'};
+  const tag=isAI?'<div class="ai-tag">'+(engineLabels[engine]||'✨ AI')+'</div>':'';
+  d.innerHTML=`<div class="ava">🤖</div><div class="bub">${tag}${fmt}</div>`;
+  area.appendChild(d);
+  if(quick.length){
+    const qr=document.createElement('div'); qr.className='qr-row';
+    quick.forEach(q=>{const b=document.createElement('button');b.className='qr';b.textContent=q;b.onclick=()=>ask(q);qr.appendChild(b);});
+    area.appendChild(qr);
+  }
+  area.scrollTop=area.scrollHeight;
+}
+
+function addUserMsg(text){
+  switchTab('chat');
+  const area=document.getElementById('tab-chat');
+  area.querySelectorAll('.qr-row').forEach(e=>e.remove());
+  const d=document.createElement('div'); d.className='msg user';
+  d.innerHTML=`<div class="bub">${text}</div>`;
+  area.appendChild(d); area.scrollTop=area.scrollHeight;
+}
+
+function showTyping(){
+  switchTab('chat');
+  const area=document.getElementById('tab-chat');
+  const d=document.createElement('div'); d.className='msg bot'; d.id='typ-ind';
+  d.innerHTML='<div class="ava">🤖</div><div class="typing-bub"><span></span><span></span><span></span></div>';
+  area.appendChild(d); area.scrollTop=area.scrollHeight;
+}
+function hideTyping(){ const t=document.getElementById('typ-ind'); if(t)t.remove(); }
+
+function ask(q){ addUserMsg(q); process(q); }
+function send(){ const i=document.getElementById('txtin'); const u=i.value.trim(); if(!u) return; i.value=''; addUserMsg(u); process(u); }
+
+async function process(text){
+  showTyping(); setSt('🧠 सोच रही हूँ...','think');
+  const resp=getResp(text);
+  if(!resp.needsAI){
+    hideTyping(); addBotMsg(resp.msg,resp.quick,false);
+    speak(resp.msg); setSt('🎤 माइक दबाएं या लिखें'); return;
+  }
+  const ai=await callAI(text);
+  hideTyping();
+  if(ai){
+    const eng=ai._engine||'ai';
+    const badge = eng==='gemini'?'gemini': eng==='groq'?'groq':'claude';
+    addBotMsg(ai,['📋 सभी सेवाएं','📞 संपर्क','🏠 मेनू'],true,badge);
+    speak(ai);
+  }
+  else { addBotMsg(resp.msg,resp.quick,false); speak(resp.msg); }
+  setSt('🎤 माइक दबाएं या लिखें');
+}
+
+function setSt(t,c=''){ const s=document.getElementById('stline'); s.textContent=t; s.className='status-line '+c; }
+function setMic(icon,cls){ const b=document.getElementById('micbtn'); b.textContent=icon; b.className='mic-btn'+(cls?' '+cls:''); }
+function resetUI(){ setSt('🎤 माइक दबाएं या लिखें'); setMic('🎤',''); }
+
+// ── AUDIO TESTS ──
+function runAudTests(){
+  setTst('at1',!!window.speechSynthesis);
+  setTimeout(()=>{loadHindiVoice();setTst('at2',!!hindiVoice,hindiVoice?.name?.substring(0,15));},500);
+  setTst('at3',typeof responsiveVoice!=='undefined');
+  setTst('at4',!!(sarvamKey||localStorage.getItem('sarvam_api_key')));
+  setTst('at6',!!(geminiKey||localStorage.getItem('gemini_api_key')));
+  setTst('at7',!!(groqKey||localStorage.getItem('groq_api_key')));
+  navigator.mediaDevices?.getUserMedia({audio:true}).then(()=>setTst('at5',true)).catch(()=>setTst('at5',false));
+}
+function setTst(id,ok,extra=''){
+  const e=document.getElementById(id);
+  e.textContent=ok?('✅ '+(extra||'उपलब्ध')):'❌ उपलब्ध नहीं';
+  e.className='aud-st '+(ok?'aud-ok':'aud-fail');
+}
+</script>
+</body>
+</html>
